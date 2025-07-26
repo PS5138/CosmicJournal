@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Calendar, Camera, Rocket, RotateCcw, AlertTriangle, Cake, Clock } from "lucide-react";
+import { Calendar, Camera, Rocket, RotateCcw, AlertTriangle, Cake, Clock, Share2, ExternalLink, Link } from "lucide-react";
+import { FaTwitter, FaFacebook, FaLinkedin, FaReddit, FaPinterest } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -19,6 +20,7 @@ export default function Home() {
   const [isTimeSliderActive, setIsTimeSliderActive] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [previewDate, setPreviewDate] = useState<string>("");
+  const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
   const queryClient = useQueryClient();
   
   const generateRandomDateInYear = (year: number) => {
@@ -119,6 +121,59 @@ export default function Home() {
 
   const handleRetry = () => {
     refetch();
+  };
+
+  // Social media sharing functions
+  const generateShareText = () => {
+    if (!apodData) return "";
+    return `🌌 ${apodData.title} - NASA's Astronomy Picture of the Day from ${formatDate(apodData.date)} 🚀\n\n${apodData.explanation.substring(0, 100)}...`;
+  };
+
+  const generateShareUrl = () => {
+    return window.location.href;
+  };
+
+  const shareToTwitter = () => {
+    const text = `🌌 ${apodData?.title} - NASA's APOD from ${formatDate(apodData?.date || "")} 🚀`;
+    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(generateShareUrl())}`;
+    window.open(url, '_blank', 'width=550,height=450');
+  };
+
+  const shareToFacebook = () => {
+    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(generateShareUrl())}&quote=${encodeURIComponent(generateShareText())}`;
+    window.open(url, '_blank', 'width=550,height=450');
+  };
+
+  const shareToLinkedIn = () => {
+    const title = `${apodData?.title} - NASA APOD`;
+    const summary = apodData?.explanation.substring(0, 200) + "...";
+    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(generateShareUrl())}&title=${encodeURIComponent(title)}&summary=${encodeURIComponent(summary)}`;
+    window.open(url, '_blank', 'width=550,height=450');
+  };
+
+  const shareToReddit = () => {
+    const title = `🌌 ${apodData?.title} - NASA's Astronomy Picture of the Day`;
+    const url = `https://reddit.com/submit?url=${encodeURIComponent(generateShareUrl())}&title=${encodeURIComponent(title)}`;
+    window.open(url, '_blank', 'width=550,height=450');
+  };
+
+  const shareToPinterest = () => {
+    if (apodData?.media_type === 'image') {
+      const description = `${apodData.title} - ${apodData.explanation.substring(0, 100)}...`;
+      const url = `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(generateShareUrl())}&media=${encodeURIComponent(apodData.url)}&description=${encodeURIComponent(description)}`;
+      window.open(url, '_blank', 'width=550,height=450');
+    }
+  };
+
+  const copyShareLink = async () => {
+    try {
+      await navigator.clipboard.writeText(generateShareUrl());
+      // You could add a toast notification here
+      alert('Link copied to clipboard!');
+    } catch (err) {
+      console.error('Failed to copy link:', err);
+      alert('Failed to copy link. Please copy manually from the address bar.');
+    }
   };
 
   if (isLoading) {
@@ -272,6 +327,25 @@ export default function Home() {
                     {apodData.explanation}
                   </p>
                 </div>
+
+                {/* Share Section */}
+                <div className="mt-6 pt-6 border-t border-[var(--cosmic-purple)]/30">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2 text-[var(--cosmic-gray)]">
+                      <Share2 className="w-4 h-4" />
+                      <span className="text-sm">Share this cosmic wonder</span>
+                    </div>
+                    <Button
+                      onClick={() => setIsShareDialogOpen(true)}
+                      variant="outline"
+                      size="sm"
+                      className="border-[var(--cosmic-purple)]/50 hover:bg-[var(--cosmic-purple)]/20 text-[var(--starlight)] rounded-xl"
+                    >
+                      <Share2 className="w-4 h-4 mr-2" />
+                      Share
+                    </Button>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           )}
@@ -344,6 +418,98 @@ export default function Home() {
             </div>
           </div>
         </main>
+
+        {/* Social Media Sharing Dialog */}
+        <Dialog open={isShareDialogOpen} onOpenChange={setIsShareDialogOpen}>
+          <DialogContent className="bg-gradient-to-br from-[var(--space-dark)] to-[var(--space-navy)] backdrop-blur-sm border border-[var(--cosmic-purple)]/50 rounded-3xl text-[var(--starlight)] max-w-md">
+            <DialogHeader>
+              <DialogTitle className="text-xl font-semibold text-center mb-2 text-[var(--starlight)] flex items-center justify-center gap-2">
+                <Share2 className="w-5 h-5 text-[var(--cosmic-purple)]" />
+                Share This Cosmic Wonder
+              </DialogTitle>
+              <DialogDescription className="text-[var(--starlight)]/80 text-center text-sm leading-relaxed">
+                Spread the beauty of the cosmos with your friends and followers
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="space-y-4 p-2">
+              {apodData && (
+                <div className="bg-[var(--space-blue)]/20 rounded-2xl p-4 border border-[var(--cosmic-purple)]/30">
+                  <h3 className="text-sm font-medium text-[var(--starlight)] mb-2 line-clamp-2">
+                    {apodData.title}
+                  </h3>
+                  <p className="text-xs text-[var(--cosmic-gray)] mb-2">
+                    {formatDate(apodData.date)}
+                  </p>
+                </div>
+              )}
+
+              {/* Social Media Buttons Grid */}
+              <div className="grid grid-cols-2 gap-3">
+                <Button
+                  onClick={shareToTwitter}
+                  className="bg-[#1DA1F2] hover:bg-[#1DA1F2]/80 text-white font-medium py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
+                >
+                  <FaTwitter className="w-4 h-4" />
+                  Twitter
+                </Button>
+                
+                <Button
+                  onClick={shareToFacebook}
+                  className="bg-[#4267B2] hover:bg-[#4267B2]/80 text-white font-medium py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
+                >
+                  <FaFacebook className="w-4 h-4" />
+                  Facebook
+                </Button>
+                
+                <Button
+                  onClick={shareToLinkedIn}
+                  className="bg-[#0077B5] hover:bg-[#0077B5]/80 text-white font-medium py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
+                >
+                  <FaLinkedin className="w-4 h-4" />
+                  LinkedIn
+                </Button>
+                
+                <Button
+                  onClick={shareToReddit}
+                  className="bg-[#FF4500] hover:bg-[#FF4500]/80 text-white font-medium py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
+                >
+                  <FaReddit className="w-4 h-4" />
+                  Reddit
+                </Button>
+                
+                {apodData?.media_type === 'image' && (
+                  <Button
+                    onClick={shareToPinterest}
+                    className="bg-[#BD081C] hover:bg-[#BD081C]/80 text-white font-medium py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
+                  >
+                    <FaPinterest className="w-4 h-4" />
+                    Pinterest
+                  </Button>
+                )}
+                
+                <Button
+                  onClick={copyShareLink}
+                  variant="outline"
+                  className="border-[var(--cosmic-purple)]/50 hover:bg-[var(--cosmic-purple)]/20 text-[var(--starlight)] font-medium py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
+                >
+                  <Link className="w-4 h-4" />
+                  Copy Link
+                </Button>
+              </div>
+
+              <div className="pt-2">
+                <Button
+                  onClick={() => setIsShareDialogOpen(false)}
+                  variant="outline"
+                  className="w-full border-[var(--cosmic-gray)]/50 hover:bg-[var(--space-navy)] hover:text-[var(--starlight)] rounded-xl text-[var(--cosmic-gray)]"
+                >
+                  Close
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
 
         {/* Footer */}
         <footer className="mt-16 text-center text-[var(--cosmic-gray)]">
