@@ -55,7 +55,7 @@ export default function CosmicBackground() {
   }, []);
 
   return (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
       {/* Starfield */}
       <div 
         className="absolute inset-0 transition-transform duration-1000 ease-out"
