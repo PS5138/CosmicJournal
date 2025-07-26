@@ -1,15 +1,19 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Calendar, Camera, Rocket, RotateCcw, AlertTriangle } from "lucide-react";
+import { Calendar, Camera, Rocket, RotateCcw, AlertTriangle, Cake } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import CosmicBackground from "@/components/cosmic-background";
 import LoadingSpinner from "@/components/loading-spinner";
 import { useApod } from "@/hooks/use-apod";
 
 export default function Home() {
   const [randomDate, setRandomDate] = useState<string | null>(null);
+  const [birthdayDate, setBirthdayDate] = useState<string>("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const queryClient = useQueryClient();
   
   const { data: apodData, isLoading, error, refetch } = useApod(randomDate);
@@ -36,6 +40,29 @@ export default function Home() {
     setRandomDate(newRandomDate);
     // Invalidate and refetch
     queryClient.invalidateQueries({ queryKey: ['apod'] });
+  };
+
+  const handleBirthdaySubmit = () => {
+    if (birthdayDate) {
+      // Validate date is not in the future and not before APOD started
+      const inputDate = new Date(birthdayDate);
+      const apodStart = new Date('1995-06-16');
+      const today = new Date();
+      
+      if (inputDate < apodStart) {
+        alert('NASA\'s APOD archive started on June 16, 1995. Please choose a date after that.');
+        return;
+      }
+      
+      if (inputDate > today) {
+        alert('Cannot fetch images from the future! Please choose a past date.');
+        return;
+      }
+      
+      setRandomDate(birthdayDate);
+      setIsDialogOpen(false);
+      queryClient.invalidateQueries({ queryKey: ['apod'] });
+    }
   };
 
   const handleRetry = () => {
@@ -148,16 +175,72 @@ export default function Home() {
             </Card>
           )}
 
-          {/* Action Button */}
-          <div className="text-center">
-            <Button 
-              onClick={handleRandomImage}
-              disabled={isLoading}
-              className="bg-gradient-to-r from-[var(--cosmic-purple)] to-[var(--stellar-blue)] hover:from-[var(--cosmic-purple)]/80 hover:to-[var(--stellar-blue)]/80 text-[var(--starlight)] font-semibold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[var(--cosmic-purple)]/50 shadow-lg text-base"
-            >
-              <RotateCcw className="w-5 h-5 mr-3" />
-              Show Another Random Image
-            </Button>
+          {/* Action Buttons */}
+          <div className="text-center space-y-4">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Button 
+                onClick={handleRandomImage}
+                disabled={isLoading}
+                className="bg-gradient-to-r from-[var(--cosmic-purple)] to-[var(--stellar-blue)] hover:from-[var(--cosmic-purple)]/80 hover:to-[var(--stellar-blue)]/80 text-[var(--starlight)] font-semibold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[var(--cosmic-purple)]/50 shadow-lg text-base"
+              >
+                <RotateCcw className="w-5 h-5 mr-3" />
+                Show Another Random Image
+              </Button>
+
+              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button 
+                    disabled={isLoading}
+                    className="bg-gradient-to-r from-[var(--solar-orange)] to-[var(--aurora-green)] hover:from-[var(--solar-orange)]/80 hover:to-[var(--aurora-green)]/80 text-[var(--starlight)] font-semibold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[var(--solar-orange)]/50 shadow-lg text-base"
+                  >
+                    <Cake className="w-5 h-5 mr-3" />
+                    Check NASA's Image on Your Birthday 🎂
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="bg-gradient-to-br from-[var(--space-blue)]/90 to-[var(--cosmic-purple)]/20 backdrop-blur-sm border border-[var(--cosmic-purple)]/30 rounded-3xl text-[var(--starlight)] max-w-md">
+                  <DialogHeader>
+                    <DialogTitle className="text-2xl font-semibold text-center mb-4 bg-gradient-to-r from-[var(--starlight)] to-[var(--cosmic-purple)] bg-clip-text text-transparent">
+                      🎂 Birthday Cosmic Journey
+                    </DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-6 p-4">
+                    <p className="text-[var(--cosmic-gray)] text-center leading-relaxed">
+                      Discover what celestial wonder NASA featured on your special day!
+                    </p>
+                    <div className="space-y-4">
+                      <label className="block text-sm font-medium text-[var(--starlight)]">
+                        Enter your birthday:
+                      </label>
+                      <Input
+                        type="date"
+                        value={birthdayDate}
+                        onChange={(e) => setBirthdayDate(e.target.value)}
+                        min="1995-06-16"
+                        max={new Date().toISOString().split('T')[0]}
+                        className="bg-[var(--space-navy)]/50 border border-[var(--cosmic-purple)]/30 rounded-xl text-[var(--starlight)] focus:ring-2 focus:ring-[var(--cosmic-purple)] focus:border-transparent"
+                      />
+                    </div>
+                    <div className="flex gap-3 pt-4">
+                      <Button
+                        onClick={() => setIsDialogOpen(false)}
+                        variant="outline"
+                        className="flex-1 border-[var(--cosmic-gray)]/30 text-[var(--cosmic-gray)] hover:bg-[var(--space-navy)]/50 rounded-xl"
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        onClick={handleBirthdaySubmit}
+                        disabled={!birthdayDate}
+                        className="flex-1 bg-gradient-to-r from-[var(--cosmic-purple)] to-[var(--stellar-blue)] hover:opacity-80 text-[var(--starlight)] rounded-xl"
+                      >
+                        <Rocket className="w-4 h-4 mr-2" />
+                        Explore
+                      </Button>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
           </div>
         </main>
 
