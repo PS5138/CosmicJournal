@@ -224,7 +224,7 @@ export default function Home() {
                       <Button
                         onClick={() => setIsDialogOpen(false)}
                         variant="outline"
-                        className="flex-1 border-[var(--cosmic-gray)]/50 text-[var(--starlight)] hover:bg-[var(--space-navy)] hover:text-[var(--starlight)] rounded-xl"
+                        className="flex-1 border-[var(--cosmic-gray)]/50 hover:bg-[var(--space-navy)] hover:text-[var(--starlight)] rounded-xl text-[#010105] bg-[#ffffff]"
                       >
                         Cancel
                       </Button>
