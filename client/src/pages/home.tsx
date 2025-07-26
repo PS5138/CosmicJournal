@@ -339,7 +339,7 @@ export default function Home() {
                       onClick={() => setIsShareDialogOpen(true)}
                       variant="outline"
                       size="sm"
-                      className="border-[var(--cosmic-purple)]/50 hover:bg-[var(--cosmic-purple)]/20 text-[var(--starlight)] rounded-xl"
+                      className="border-[var(--cosmic-purple)]/50 hover:bg-[var(--cosmic-purple)]/20 text-[#030202] rounded-xl"
                     >
                       <Share2 className="w-4 h-4 mr-2" />
                       Share
