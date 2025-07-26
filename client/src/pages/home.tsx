@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import CosmicBackground from "@/components/cosmic-background";
 import LoadingSpinner from "@/components/loading-spinner";
 import { useApod } from "@/hooks/use-apod";
@@ -197,17 +197,17 @@ export default function Home() {
                     Check NASA's Image on Your Birthday 🎂
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="bg-gradient-to-br from-[var(--space-blue)]/90 to-[var(--cosmic-purple)]/20 backdrop-blur-sm border border-[var(--cosmic-purple)]/30 rounded-3xl text-[var(--starlight)] max-w-md">
+                <DialogContent className="bg-gradient-to-br from-[var(--space-dark)] to-[var(--space-navy)] backdrop-blur-sm border border-[var(--cosmic-purple)]/50 rounded-3xl text-[var(--starlight)] max-w-sm">
                   <DialogHeader>
-                    <DialogTitle className="text-2xl font-semibold text-center mb-4 bg-gradient-to-r from-[var(--starlight)] to-[var(--cosmic-purple)] bg-clip-text text-transparent">
+                    <DialogTitle className="text-xl font-semibold text-center mb-2 text-[var(--starlight)]">
                       🎂 Birthday Cosmic Journey
                     </DialogTitle>
-                  </DialogHeader>
-                  <div className="space-y-6 p-4">
-                    <p className="text-[var(--cosmic-gray)] text-center leading-relaxed">
+                    <DialogDescription className="text-[var(--starlight)]/80 text-center text-sm leading-relaxed">
                       Discover what celestial wonder NASA featured on your special day!
-                    </p>
-                    <div className="space-y-4">
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="space-y-4 p-2">
+                    <div className="space-y-3">
                       <label className="block text-sm font-medium text-[var(--starlight)]">
                         Enter your birthday:
                       </label>
@@ -217,14 +217,14 @@ export default function Home() {
                         onChange={(e) => setBirthdayDate(e.target.value)}
                         min="1995-06-16"
                         max={new Date().toISOString().split('T')[0]}
-                        className="bg-[var(--space-navy)]/50 border border-[var(--cosmic-purple)]/30 rounded-xl text-[var(--starlight)] focus:ring-2 focus:ring-[var(--cosmic-purple)] focus:border-transparent"
+                        className="bg-[var(--space-navy)] border border-[var(--cosmic-purple)]/50 rounded-xl text-[var(--starlight)] focus:ring-2 focus:ring-[var(--cosmic-purple)] focus:border-[var(--cosmic-purple)] placeholder:text-[var(--cosmic-gray)]"
                       />
                     </div>
-                    <div className="flex gap-3 pt-4">
+                    <div className="flex gap-3 pt-2">
                       <Button
                         onClick={() => setIsDialogOpen(false)}
                         variant="outline"
-                        className="flex-1 border-[var(--cosmic-gray)]/30 text-[var(--cosmic-gray)] hover:bg-[var(--space-navy)]/50 rounded-xl"
+                        className="flex-1 border-[var(--cosmic-gray)]/50 text-[var(--starlight)] hover:bg-[var(--space-navy)] hover:text-[var(--starlight)] rounded-xl"
                       >
                         Cancel
                       </Button>
