@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Calendar, Camera, Rocket, RotateCcw, AlertTriangle, Cake } from "lucide-react";
+import { Calendar, Camera, Rocket, RotateCcw, AlertTriangle, Cake, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
+import { Slider } from "@/components/ui/slider";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import CosmicBackground from "@/components/cosmic-background";
 import LoadingSpinner from "@/components/loading-spinner";
@@ -14,9 +15,23 @@ export default function Home() {
   const [randomDate, setRandomDate] = useState<string | null>(null);
   const [birthdayDate, setBirthdayDate] = useState<string>("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [timeSliderYear, setTimeSliderYear] = useState<number>(new Date().getFullYear());
+  const [isTimeSliderActive, setIsTimeSliderActive] = useState(false);
   const queryClient = useQueryClient();
   
-  const { data: apodData, isLoading, error, refetch } = useApod(randomDate);
+  // Determine which date to use based on active mode
+  const getActiveDate = () => {
+    if (isTimeSliderActive) {
+      // Generate a random date within the selected year
+      const startOfYear = new Date(timeSliderYear, 0, 1);
+      const endOfYear = new Date(timeSliderYear, 11, 31);
+      const randomTime = startOfYear.getTime() + Math.random() * (endOfYear.getTime() - startOfYear.getTime());
+      return new Date(randomTime).toISOString().split('T')[0];
+    }
+    return randomDate;
+  };
+
+  const { data: apodData, isLoading, error, refetch } = useApod(getActiveDate());
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -35,12 +50,7 @@ export default function Home() {
     return randomDate.toISOString().split('T')[0];
   };
 
-  const handleRandomImage = () => {
-    const newRandomDate = getRandomDate();
-    setRandomDate(newRandomDate);
-    // Invalidate and refetch
-    queryClient.invalidateQueries({ queryKey: ['apod'] });
-  };
+  // This function was moved above, removing duplicate
 
   const handleBirthdaySubmit = () => {
     if (birthdayDate) {
@@ -59,10 +69,26 @@ export default function Home() {
         return;
       }
       
+      setIsTimeSliderActive(false);
       setRandomDate(birthdayDate);
       setIsDialogOpen(false);
       queryClient.invalidateQueries({ queryKey: ['apod'] });
     }
+  };
+
+  const handleTimeSliderChange = (value: number[]) => {
+    const year = value[0];
+    setTimeSliderYear(year);
+    setIsTimeSliderActive(true);
+    setRandomDate(null); // Clear other date modes
+    queryClient.invalidateQueries({ queryKey: ['apod'] });
+  };
+
+  const handleRandomImage = () => {
+    const newRandomDate = getRandomDate();
+    setIsTimeSliderActive(false);
+    setRandomDate(newRandomDate);
+    queryClient.invalidateQueries({ queryKey: ['apod'] });
   };
 
   const handleRetry = () => {
@@ -122,6 +148,41 @@ export default function Home() {
             A daily window into the cosmos, featuring NASA's Astronomy Picture of the Day
           </p>
         </header>
+
+        {/* Cosmic Time Travel Slider */}
+        <div className="mb-12 animate-slide-up">
+          <Card className="bg-gradient-to-r from-[var(--space-blue)]/40 to-[var(--cosmic-purple)]/20 backdrop-blur-sm border border-[var(--cosmic-purple)]/30 rounded-2xl p-6 relative z-10">
+            <div className="text-center mb-6">
+              <h3 className="text-xl font-semibold mb-2 text-[var(--starlight)] flex items-center justify-center gap-2">
+                <Clock className="w-5 h-5 text-[var(--cosmic-purple)]" />
+                Cosmic Time Travel
+              </h3>
+              <p className="text-[var(--cosmic-gray)] text-sm">
+                Journey through {timeSliderYear} • Explore NASA's archives across the years
+              </p>
+            </div>
+            
+            <div className="max-w-2xl mx-auto">
+              <div className="relative">
+                <Slider
+                  value={[timeSliderYear]}
+                  onValueChange={handleTimeSliderChange}
+                  min={1995}
+                  max={new Date().getFullYear()}
+                  step={1}
+                  className="cosmic-slider"
+                />
+                <div className="flex justify-between text-xs text-[var(--cosmic-gray)] mt-2">
+                  <span>1995</span>
+                  <span className="text-[var(--stellar-blue)] font-medium">
+                    {timeSliderYear}
+                  </span>
+                  <span>{new Date().getFullYear()}</span>
+                </div>
+              </div>
+            </div>
+          </Card>
+        </div>
 
         {/* Main Content */}
         <main className="animate-slide-up">

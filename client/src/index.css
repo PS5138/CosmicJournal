@@ -133,6 +133,43 @@
   .bg-gradient-radial {
     background: radial-gradient(circle, var(--tw-gradient-stops));
   }
+
+  /* Cosmic Slider Styling */
+  .cosmic-slider [data-radix-collection-item] {
+    background: linear-gradient(90deg, var(--cosmic-purple), var(--stellar-blue), var(--aurora-green)) !important;
+    height: 6px !important;
+    border-radius: 3px !important;
+    box-shadow: 0 0 20px var(--cosmic-purple)/30 !important;
+  }
+
+  .cosmic-slider [role="slider"] {
+    width: 20px !important;
+    height: 20px !important;
+    background: radial-gradient(circle, var(--starlight), var(--cosmic-purple)) !important;
+    border: 2px solid var(--stellar-blue) !important;
+    box-shadow: 
+      0 0 15px var(--cosmic-purple)/50,
+      0 0 30px var(--stellar-blue)/30,
+      inset 0 0 10px var(--starlight)/20 !important;
+    transition: all 0.3s ease !important;
+  }
+
+  .cosmic-slider [role="slider"]:hover {
+    transform: scale(1.2) !important;
+    box-shadow: 
+      0 0 25px var(--cosmic-purple)/70,
+      0 0 40px var(--stellar-blue)/50,
+      inset 0 0 15px var(--starlight)/30 !important;
+  }
+
+  .cosmic-slider [role="slider"]:focus {
+    outline: none !important;
+    transform: scale(1.15) !important;
+    box-shadow: 
+      0 0 30px var(--cosmic-purple)/80,
+      0 0 50px var(--stellar-blue)/60,
+      inset 0 0 20px var(--starlight)/40 !important;
+  }
 }
 
 @keyframes spin-slow {
