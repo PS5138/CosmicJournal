@@ -218,7 +218,6 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[var(--space-dark)] via-[var(--space-navy)] to-[var(--space-blue)] text-[var(--starlight)] overflow-x-hidden font-inter">
       <CosmicBackground />
-      
       <div className="relative z-10 container mx-auto px-4 py-8 max-w-4xl">
         {/* Header */}
         <header className="text-center mb-12 animate-fade-in">
@@ -333,7 +332,7 @@ export default function Home() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2 text-[var(--cosmic-gray)]">
                       <Share2 className="w-4 h-4" />
-                      <span className="text-sm">Share this cosmic wonder</span>
+                      <span className="text-sm">Share this cosmic wonder -------------------------------------------------------------------------------</span>
                     </div>
                     <Button
                       onClick={() => setIsShareDialogOpen(true)}
