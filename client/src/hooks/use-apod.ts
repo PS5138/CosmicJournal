@@ -11,17 +11,17 @@ interface APODData {
 }
 
 async function fetchAPOD(date?: string | null): Promise<APODData> {
-  const API_KEY = import.meta.env.VITE_NASA_API_KEY || process.env.NASA_API_KEY || 'DEMO_KEY';
-  let url = `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}`;
+  let url = '/api/apod';
   
   if (date) {
-    url += `&date=${date}`;
+    url += `?date=${date}`;
   }
 
   const response = await fetch(url);
   
   if (!response.ok) {
-    throw new Error(`Failed to fetch APOD: ${response.status} ${response.statusText}`);
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.error || `Failed to fetch APOD: ${response.status} ${response.statusText}`);
   }
 
   const data = await response.json();
