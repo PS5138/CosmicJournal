@@ -82,7 +82,7 @@ export default function Home() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[var(--space-dark)] via-[var(--space-navy)] to-[var(--space-blue)] text-[var(--starlight)] overflow-x-hidden">
         <CosmicBackground />
-        <div className="relative z-10 container mx-auto px-4 py-8 max-w-4xl">
+        <div className="relative z-20 container mx-auto px-4 py-8 max-w-4xl">
           <div className="flex items-center justify-center min-h-screen">
             <Alert className="bg-gradient-to-r from-red-900/20 to-[var(--solar-orange)]/20 border border-red-500/30 rounded-2xl p-6 animate-slide-up max-w-md">
               <AlertTriangle className="h-4 w-4 text-[var(--solar-orange)]" />
@@ -112,7 +112,7 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-[var(--space-dark)] via-[var(--space-navy)] to-[var(--space-blue)] text-[var(--starlight)] overflow-x-hidden font-inter">
       <CosmicBackground />
       
-      <div className="relative z-10 container mx-auto px-4 py-8 max-w-4xl">
+      <div className="relative z-20 container mx-auto px-4 py-8 max-w-4xl">
         {/* Header */}
         <header className="text-center mb-12 animate-fade-in">
           <h1 className="text-4xl md:text-5xl font-light mb-4 bg-gradient-to-r from-[var(--starlight)] via-[var(--cosmic-purple)] to-[var(--stellar-blue)] bg-clip-text text-transparent">
