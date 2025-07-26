@@ -4,7 +4,7 @@
 
 This is a clean, minimalist space-themed web application that displays NASA's Astronomy Picture of the Day (APOD). The application serves as a meditative space diary, allowing users to view daily astronomical images/videos and explore random entries from the APOD archive. Built with a modern full-stack architecture using React, Express, and PostgreSQL.
 
-**Status**: ✅ Fully functional with NASA API integration, beautiful space-themed UI, and interactive Cosmic Time Travel Slider (July 26, 2025)
+**Status**: ✅ Fully functional with NASA API integration, beautiful space-themed UI, interactive Cosmic Time Travel Slider, and Google Analytics tracking (July 26, 2025)
 
 ## User Preferences
 
@@ -49,6 +49,7 @@ Preferred communication style: Simple, everyday language.
 - **useApod**: NASA APOD API integration with caching and error handling
 - **useToast**: Notification system for user feedback
 - **useMobile**: Responsive design utilities
+- **useAnalytics**: Automatic page view tracking for single-page application routing
 
 ## Data Flow
 
@@ -94,7 +95,8 @@ Preferred communication style: Simple, everyday language.
 - **Development**: Hot reload with Vite dev server proxy
 - **Production**: Static file serving with Express
 - **Database**: PostgreSQL connection via `DATABASE_URL` environment variable
-- **NASA API**: Optional `NASA_API_KEY` or `VITE_NASA_API_KEY` for increased rate limits
+- **NASA API**: Optional `NASA_API_KEY` for increased rate limits (secure backend proxy)
+- **Analytics**: `VITE_GA_MEASUREMENT_ID` for Google Analytics visitor tracking
 
 ### Hosting Requirements
 - **Node.js**: ES modules support required
@@ -102,11 +104,25 @@ Preferred communication style: Simple, everyday language.
 - **Environment Variables**: `DATABASE_URL` for database connection
 - **Static Assets**: Served from `/dist/public` directory
 
+## Analytics & Tracking
+
+### Google Analytics Integration
+- **Automatic Initialization**: Google Analytics is initialized when the app loads
+- **Page View Tracking**: Automatic tracking of route changes in the single-page application
+- **Event Tracking**: Custom events for key user interactions:
+  - Birthday lookup usage (with date parameter)
+  - Cosmic Time Travel Slider usage (with year parameter)
+  - Random image generation (with date parameter)
+  - Social media sharing (platform-specific tracking)
+  - Link copying to clipboard
+- **Security**: Analytics measurement ID is handled via environment variables
+- **Data Collection**: Tracks daily visitors, popular features, and user engagement patterns
+
 ### Future Extensibility
 The architecture supports easy addition of:
 - User authentication and personalized favorites
 - Bookmarking and collection features
-- Social sharing capabilities
 - Advanced search and filtering
 - Offline support with service workers
 - Enhanced accessibility features
+- Advanced analytics dashboards and reporting

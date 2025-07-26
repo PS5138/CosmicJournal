@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import CosmicBackground from "@/components/cosmic-background";
 import LoadingSpinner from "@/components/loading-spinner";
 import { useApod } from "@/hooks/use-apod";
+import { trackEvent } from "@/lib/analytics";
 
 export default function Home() {
   const [randomDate, setRandomDate] = useState<string | null>(null);
@@ -85,6 +86,9 @@ export default function Home() {
         return;
       }
       
+      // Track birthday lookup usage
+      trackEvent('birthday_lookup', 'user_interaction', birthdayDate);
+      
       setIsTimeSliderActive(false);
       setRandomDate(birthdayDate);
       setIsDialogOpen(false);
@@ -109,6 +113,10 @@ export default function Home() {
     setRandomDate(null); // Clear other date modes
     setIsDragging(false);
     setPreviewDate("");
+    
+    // Track time travel usage
+    trackEvent('time_travel', 'user_interaction', year.toString());
+    
     queryClient.invalidateQueries({ queryKey: ['apod'] });
   };
 
@@ -116,6 +124,10 @@ export default function Home() {
     const newRandomDate = getRandomDate();
     setIsTimeSliderActive(false);
     setRandomDate(newRandomDate);
+    
+    // Track random image usage
+    trackEvent('random_image', 'user_interaction', newRandomDate);
+    
     queryClient.invalidateQueries({ queryKey: ['apod'] });
   };
 
@@ -134,17 +146,20 @@ export default function Home() {
   };
 
   const shareToTwitter = () => {
+    trackEvent('share', 'social_media', 'twitter');
     const text = `🌌 ${apodData?.title} - NASA's APOD from ${formatDate(apodData?.date || "")} 🚀`;
     const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(generateShareUrl())}`;
     window.open(url, '_blank', 'width=550,height=450');
   };
 
   const shareToFacebook = () => {
+    trackEvent('share', 'social_media', 'facebook');
     const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(generateShareUrl())}&quote=${encodeURIComponent(generateShareText())}`;
     window.open(url, '_blank', 'width=550,height=450');
   };
 
   const shareToLinkedIn = () => {
+    trackEvent('share', 'social_media', 'linkedin');
     const title = `${apodData?.title} - NASA APOD`;
     const summary = apodData?.explanation.substring(0, 200) + "...";
     const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(generateShareUrl())}&title=${encodeURIComponent(title)}&summary=${encodeURIComponent(summary)}`;
@@ -152,6 +167,7 @@ export default function Home() {
   };
 
   const shareToReddit = () => {
+    trackEvent('share', 'social_media', 'reddit');
     const title = `🌌 ${apodData?.title} - NASA's Astronomy Picture of the Day`;
     const url = `https://reddit.com/submit?url=${encodeURIComponent(generateShareUrl())}&title=${encodeURIComponent(title)}`;
     window.open(url, '_blank', 'width=550,height=450');
@@ -159,6 +175,7 @@ export default function Home() {
 
   const shareToPinterest = () => {
     if (apodData?.media_type === 'image') {
+      trackEvent('share', 'social_media', 'pinterest');
       const description = `${apodData.title} - ${apodData.explanation.substring(0, 100)}...`;
       const url = `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(generateShareUrl())}&media=${encodeURIComponent(apodData.url)}&description=${encodeURIComponent(description)}`;
       window.open(url, '_blank', 'width=550,height=450');
@@ -166,6 +183,7 @@ export default function Home() {
   };
 
   const copyShareLink = async () => {
+    trackEvent('share', 'copy_link', 'clipboard');
     try {
       await navigator.clipboard.writeText(generateShareUrl());
       // You could add a toast notification here
