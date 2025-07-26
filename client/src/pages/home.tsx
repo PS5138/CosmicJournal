@@ -17,16 +17,14 @@ export default function Home() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [timeSliderYear, setTimeSliderYear] = useState<number>(new Date().getFullYear());
   const [isTimeSliderActive, setIsTimeSliderActive] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [previewDate, setPreviewDate] = useState<string>("");
   const queryClient = useQueryClient();
   
   // Determine which date to use based on active mode
   const getActiveDate = () => {
-    if (isTimeSliderActive) {
-      // Generate a random date within the selected year
-      const startOfYear = new Date(timeSliderYear, 0, 1);
-      const endOfYear = new Date(timeSliderYear, 11, 31);
-      const randomTime = startOfYear.getTime() + Math.random() * (endOfYear.getTime() - startOfYear.getTime());
-      return new Date(randomTime).toISOString().split('T')[0];
+    if (isTimeSliderActive && !isDragging) {
+      return generateRandomDateInYear(timeSliderYear);
     }
     return randomDate;
   };
@@ -50,7 +48,23 @@ export default function Home() {
     return randomDate.toISOString().split('T')[0];
   };
 
-  // This function was moved above, removing duplicate
+  const generateRandomDateInYear = (year: number) => {
+    const startOfYear = new Date(year, 0, 1);
+    const endOfYear = new Date(year, 11, 31);
+    
+    // If it's 1995, start from June 16 when APOD began
+    if (year === 1995) {
+      startOfYear.setMonth(5, 16); // June 16
+    }
+    
+    // If it's current year, end at today
+    if (year === new Date().getFullYear()) {
+      endOfYear.setTime(new Date().getTime());
+    }
+    
+    const randomTime = startOfYear.getTime() + Math.random() * (endOfYear.getTime() - startOfYear.getTime());
+    return new Date(randomTime).toISOString().split('T')[0];
+  };
 
   const handleBirthdaySubmit = () => {
     if (birthdayDate) {
@@ -79,8 +93,20 @@ export default function Home() {
   const handleTimeSliderChange = (value: number[]) => {
     const year = value[0];
     setTimeSliderYear(year);
+    setIsDragging(true);
+    
+    // Generate a preview date for the bubble
+    const previewDateStr = generateRandomDateInYear(year);
+    setPreviewDate(previewDateStr);
+  };
+
+  const handleTimeSliderCommit = (value: number[]) => {
+    const year = value[0];
+    setTimeSliderYear(year);
     setIsTimeSliderActive(true);
     setRandomDate(null); // Clear other date modes
+    setIsDragging(false);
+    setPreviewDate("");
     queryClient.invalidateQueries({ queryKey: ['apod'] });
   };
 
@@ -167,15 +193,29 @@ export default function Home() {
                 <Slider
                   value={[timeSliderYear]}
                   onValueChange={handleTimeSliderChange}
+                  onValueCommit={handleTimeSliderCommit}
                   min={1995}
                   max={new Date().getFullYear()}
                   step={1}
                   className="cosmic-slider"
                 />
+                
+                {/* Date Preview Bubble */}
+                {isDragging && previewDate && (
+                  <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 bg-[var(--cosmic-purple)]/90 backdrop-blur-sm border border-[var(--stellar-blue)]/50 rounded-lg px-3 py-2 text-sm text-[var(--starlight)] font-medium shadow-lg animate-fade-in z-20">
+                    <div className="text-center">
+                      <div className="text-xs text-[var(--cosmic-gray)] mb-1">Preview Date</div>
+                      <div>{formatDate(previewDate)}</div>
+                    </div>
+                    {/* Arrow pointing down */}
+                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-[var(--cosmic-purple)]/90"></div>
+                  </div>
+                )}
+                
                 <div className="flex justify-between text-xs text-[var(--cosmic-gray)] mt-2">
                   <span>1995</span>
                   <span className="text-[var(--stellar-blue)] font-medium">
-                    {timeSliderYear}
+                    {isDragging ? `Exploring ${timeSliderYear}` : timeSliderYear}
                   </span>
                   <span>{new Date().getFullYear()}</span>
                 </div>
