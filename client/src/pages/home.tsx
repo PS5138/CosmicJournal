@@ -217,7 +217,7 @@ export default function Home() {
                         onChange={(e) => setBirthdayDate(e.target.value)}
                         min="1995-06-16"
                         max={new Date().toISOString().split('T')[0]}
-                        className="bg-[var(--space-navy)] border border-[var(--cosmic-purple)]/50 rounded-xl text-[var(--starlight)] focus:ring-2 focus:ring-[var(--cosmic-purple)] focus:border-[var(--cosmic-purple)] placeholder:text-[var(--cosmic-gray)]"
+                        className="border border-[var(--cosmic-purple)]/50 rounded-xl text-[var(--starlight)] focus:ring-2 focus:ring-[var(--cosmic-purple)] focus:border-[var(--cosmic-purple)] placeholder:text-[var(--cosmic-gray)] ml-[0px] mr-[0px] mt-[5px] mb-[5px] pl-[104px] pr-[104px] pt-[8px] pb-[8px] bg-[#0f0909]"
                       />
                     </div>
                     <div className="flex gap-3 pt-2">
