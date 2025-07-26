@@ -490,7 +490,7 @@ export default function Home() {
                 <Button
                   onClick={copyShareLink}
                   variant="outline"
-                  className="border-[var(--cosmic-purple)]/50 hover:bg-[var(--cosmic-purple)]/20 text-[var(--starlight)] font-medium py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
+                  className="border-[var(--cosmic-purple)]/50 hover:bg-[var(--cosmic-purple)]/20 text-[#000000] font-medium py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
                 >
                   <Link className="w-4 h-4" />
                   Copy Link
