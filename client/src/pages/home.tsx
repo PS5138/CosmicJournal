@@ -21,6 +21,24 @@ export default function Home() {
   const [previewDate, setPreviewDate] = useState<string>("");
   const queryClient = useQueryClient();
   
+  const generateRandomDateInYear = (year: number) => {
+    const startOfYear = new Date(year, 0, 1);
+    const endOfYear = new Date(year, 11, 31);
+    
+    // If it's 1995, start from June 16 when APOD began
+    if (year === 1995) {
+      startOfYear.setMonth(5, 16); // June 16
+    }
+    
+    // If it's current year, end at today
+    if (year === new Date().getFullYear()) {
+      endOfYear.setTime(new Date().getTime());
+    }
+    
+    const randomTime = startOfYear.getTime() + Math.random() * (endOfYear.getTime() - startOfYear.getTime());
+    return new Date(randomTime).toISOString().split('T')[0];
+  };
+  
   // Determine which date to use based on active mode
   const getActiveDate = () => {
     if (isTimeSliderActive && !isDragging) {
@@ -46,24 +64,6 @@ export default function Home() {
     const randomTime = start.getTime() + Math.random() * (end.getTime() - start.getTime());
     const randomDate = new Date(randomTime);
     return randomDate.toISOString().split('T')[0];
-  };
-
-  const generateRandomDateInYear = (year: number) => {
-    const startOfYear = new Date(year, 0, 1);
-    const endOfYear = new Date(year, 11, 31);
-    
-    // If it's 1995, start from June 16 when APOD began
-    if (year === 1995) {
-      startOfYear.setMonth(5, 16); // June 16
-    }
-    
-    // If it's current year, end at today
-    if (year === new Date().getFullYear()) {
-      endOfYear.setTime(new Date().getTime());
-    }
-    
-    const randomTime = startOfYear.getTime() + Math.random() * (endOfYear.getTime() - startOfYear.getTime());
-    return new Date(randomTime).toISOString().split('T')[0];
   };
 
   const handleBirthdaySubmit = () => {
