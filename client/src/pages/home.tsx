@@ -360,7 +360,7 @@ export default function Home() {
                         <Button
                           onClick={handleRandomImage}
                           variant="outline"
-                          className="border-[var(--stellar-blue)]/50 hover:bg-[var(--stellar-blue)]/20 text-[var(--starlight)] rounded-xl"
+                          className="border-[var(--stellar-blue)]/50 hover:bg-[var(--stellar-blue)]/20 text-[#000000] rounded-xl"
                         >
                           <RotateCcw className="w-4 h-4 mr-2" />
                           Try Different Date
