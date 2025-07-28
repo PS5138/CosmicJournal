@@ -338,24 +338,30 @@ export default function Home() {
                   ) : (
                     <div className="w-full max-w-3xl mx-auto rounded-2xl bg-gradient-to-br from-[var(--space-blue)]/40 to-[var(--cosmic-purple)]/20 border border-[var(--cosmic-purple)]/30 p-8 text-center">
                       <div className="flex items-center justify-center mb-4">
-                        <AlertTriangle className="w-8 h-8 text-[var(--stellar-blue)]" />
+                        <Camera className="w-8 h-8 text-[var(--stellar-blue)]" />
                       </div>
                       <h3 className="text-xl font-semibold text-[var(--starlight)] mb-2">
-                        Special Content Entry
+                        NASA Video Content Available
                       </h3>
                       <p className="text-[var(--cosmic-gray)] leading-relaxed mb-4">
-                        Today's entry contains special astronomical content that isn't available as a direct image or video link. 
-                        {apodData.explanation.toLowerCase().includes('video') && 
-                          " The description mentions a video - this content may be available on NASA's main website."}
+                        Today's APOD features a special video from NASA's DART mission showing the collision with asteroid Dimorphos. 
+                        The video is available on NASA's official APOD page.
                       </p>
+                      <div className="mb-4 p-4 bg-[var(--space-dark)]/30 rounded-xl border border-[var(--cosmic-purple)]/20">
+                        <p className="text-sm text-[var(--cosmic-gray)] mb-2">
+                          <strong className="text-[var(--starlight)]">Featured Video:</strong> Time-lapse from LICIACube's LUKE camera
+                        </p>
+                        <p className="text-sm text-[var(--cosmic-gray)]">
+                          Showing ~250 seconds of expanding debris field after DART's collision with Dimorphos
+                        </p>
+                      </div>
                       <div className="space-y-3">
                         <Button
-                          onClick={() => window.open('https://apod.nasa.gov/apod/astropix.html', '_blank')}
-                          variant="outline"
-                          className="border-[var(--cosmic-purple)]/50 hover:bg-[var(--cosmic-purple)]/20 text-[#000000] rounded-xl mr-3"
+                          onClick={() => window.open(`https://apod.nasa.gov/apod/ap${apodData.date.replace(/-/g, '').slice(2)}.html`, '_blank')}
+                          className="bg-gradient-to-r from-[var(--cosmic-purple)] to-[var(--stellar-blue)] hover:from-[var(--cosmic-purple)]/80 hover:to-[var(--stellar-blue)]/80 text-[var(--starlight)] rounded-xl mr-3"
                         >
                           <ExternalLink className="w-4 h-4 mr-2" />
-                          View on NASA APOD
+                          Watch Video on NASA APOD
                         </Button>
                         <Button
                           onClick={handleRandomImage}
