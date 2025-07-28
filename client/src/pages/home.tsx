@@ -61,14 +61,17 @@ export default function Home() {
     }
   }, [apodData, currentDate]);
 
+  // Force fresh query for today's date to bypass React Query cache
   useEffect(() => {
     if (currentDate === '2025-07-28') {
       queryClient.removeQueries({ queryKey: ['apod', '2025-07-28'] });
       setTimeout(() => {
         refetch();
-      }, 300); // 300ms buffer to ensure backend finishes extraction
+      }, 300);
     }
-  }, [currentDate]);
+  }, [currentDate, queryClient, refetch]);
+
+
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
