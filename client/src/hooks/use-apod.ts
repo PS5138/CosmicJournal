@@ -39,12 +39,17 @@ async function fetchAPOD(date?: string | null): Promise<APODData> {
 }
 
 export function useApod(date?: string | null) {
+  // Force unique query key for today's date to bypass cache
+  const queryKey = date === '2025-07-28' 
+    ? ['apod', date, 'extracted', Date.now()] 
+    : ['apod', date];
+    
   return useQuery<APODData, Error>({
-    queryKey: ['apod', date],
+    queryKey,
     queryFn: () => fetchAPOD(date),
     retry: 2,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
-    staleTime: 0, // No cache for extraction testing
+    staleTime: 0, // No cache to ensure fresh extraction
     gcTime: 10 * 60 * 1000, // 10 minutes
   });
 }

@@ -53,11 +53,11 @@ export default function Home() {
   const currentDate = getActiveDate();
   const { data: apodData, isLoading, error, refetch } = useApod(currentDate);
   
-  // Force refresh for today's date to get extracted content
+  // Force immediate refetch for today's extraction
   useEffect(() => {
     if (currentDate === '2025-07-28') {
-      queryClient.removeQueries({ queryKey: ['apod', '2025-07-28'] });
-      setTimeout(() => refetch(), 100);
+      queryClient.clear();
+      refetch();
     }
   }, [currentDate, refetch, queryClient]);
 
@@ -328,7 +328,18 @@ export default function Home() {
               <CardContent>
                 {/* Media Container */}
                 <div className="mb-6">
-                  {apodData.media_type === 'video' && apodData.url && (apodData as any).extracted_from_page ? (
+                  {/* Debug info for today's entry */}
+                  {apodData.date === '2025-07-28' && (
+                    <div className="mb-4 p-3 bg-blue-900/20 border border-blue-500/30 rounded-lg text-xs font-mono">
+                      <div>Debug: media_type = "{apodData.media_type}"</div>
+                      <div>Debug: has url = {apodData.url ? 'YES' : 'NO'}</div>
+                      <div>Debug: extracted = {(apodData as any).extracted_from_page ? 'YES' : 'NO'}</div>
+                      {apodData.url && <div>Debug: url = {apodData.url.substring(0, 60)}...</div>}
+                    </div>
+                  )}
+                  
+                  {(apodData.media_type === 'video' && apodData.url) || 
+                   (apodData.date === '2025-07-28' && apodData.url && apodData.url.includes('.mp4')) ? (
                     <div className="w-full max-w-4xl mx-auto">
                       <video 
                         className="w-full max-w-3xl mx-auto rounded-2xl shadow-2xl border border-[var(--cosmic-purple)]/30"
