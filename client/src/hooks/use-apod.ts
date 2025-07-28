@@ -16,6 +16,10 @@ async function fetchAPOD(date?: string | null): Promise<APODData> {
   
   if (date) {
     url += `?date=${date}`;
+    // Add cache buster for today's date to force extraction
+    if (date === '2025-07-28') {
+      url += `&_cb=${Date.now()}`;
+    }
   }
 
   const response = await fetch(url);
@@ -40,6 +44,7 @@ export function useApod(date?: string | null) {
     queryFn: () => fetchAPOD(date),
     retry: 2,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 0, // No cache for extraction testing
+    gcTime: 10 * 60 * 1000, // 10 minutes
   });
 }

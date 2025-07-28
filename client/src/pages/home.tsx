@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Calendar, Camera, Rocket, RotateCcw, AlertTriangle, Cake, Clock, Share2, ExternalLink, Link } from "lucide-react";
 import { FaTwitter, FaFacebook, FaLinkedin, FaReddit, FaPinterest } from "react-icons/fa";
@@ -50,7 +50,16 @@ export default function Home() {
     return randomDate;
   };
 
-  const { data: apodData, isLoading, error, refetch } = useApod(getActiveDate());
+  const currentDate = getActiveDate();
+  const { data: apodData, isLoading, error, refetch } = useApod(currentDate);
+  
+  // Force refresh for today's date to get extracted content
+  useEffect(() => {
+    if (currentDate === '2025-07-28') {
+      queryClient.removeQueries({ queryKey: ['apod', '2025-07-28'] });
+      setTimeout(() => refetch(), 100);
+    }
+  }, [currentDate, refetch, queryClient]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);

@@ -101,6 +101,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
           data.media_type = extractedMedia.media_type;
           data.url = extractedMedia.url;
           data.extracted_from_page = true;
+          
+          // Force no-cache for extracted content
+          res.set({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+          });
         }
       }
 
