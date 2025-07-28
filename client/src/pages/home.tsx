@@ -55,21 +55,23 @@ export default function Home() {
   
   // Debug logging for today's date
   useEffect(() => {
-    if (currentDate === '2025-07-28' && apodData) {
-      console.log('media_type:', apodData?.media_type);
-      console.log('url:', apodData?.url);
-    }
+    console.log('Current Date:', currentDate);
+    console.log('APOD Data Date:', apodData?.date);
+    console.log('Media Type:', apodData?.media_type);
+    console.log('URL:', apodData?.url);
+    console.log('Extracted:', apodData?.extracted_from_page);
   }, [apodData, currentDate]);
 
   // Force fresh query for today's date to bypass React Query cache
   useEffect(() => {
-    if (currentDate === '2025-07-28') {
-      queryClient.removeQueries({ queryKey: ['apod', '2025-07-28'] });
+    if (currentDate === '2025-07-28' || (currentDate === null && apodData?.date === '2025-07-28')) {
+      console.log('Forcing fresh query for today\'s date...');
+      queryClient.removeQueries({ queryKey: ['apod', currentDate] });
       setTimeout(() => {
         refetch();
       }, 300);
     }
-  }, [currentDate, queryClient, refetch]);
+  }, [currentDate, queryClient, refetch, apodData?.date]);
 
 
 
@@ -148,6 +150,17 @@ export default function Home() {
     
     // Track random image usage
     trackEvent('random_image', 'user_interaction', newRandomDate);
+    
+    queryClient.invalidateQueries({ queryKey: ['apod'] });
+  };
+
+  const handleTodayImage = () => {
+    const today = new Date().toISOString().split('T')[0];
+    setIsTimeSliderActive(false);
+    setRandomDate(today);
+    
+    // Track today button usage
+    trackEvent('today_view', 'user_interaction', today);
     
     queryClient.invalidateQueries({ queryKey: ['apod'] });
   };
@@ -339,9 +352,9 @@ export default function Home() {
 
               <CardContent>
                 {/* Debug Display */}
-                {currentDate === '2025-07-28' && apodData && (
+                {(currentDate === '2025-07-28' || (currentDate === null && apodData?.date === '2025-07-28')) && apodData && (
                   <div className="mb-6 p-4 bg-gray-900/50 rounded-lg">
-                    <h4 className="text-sm font-bold text-yellow-400 mb-2">Debug Data:</h4>
+                    <h4 className="text-sm font-bold text-yellow-400 mb-2">Debug Data (currentDate: {currentDate || 'null'}):</h4>
                     <pre className="text-xs text-left whitespace-pre-wrap break-all text-[var(--cosmic-gray)]">
                       {JSON.stringify(apodData, null, 2)}
                     </pre>
@@ -450,6 +463,15 @@ export default function Home() {
                     {/* Action Buttons */}
                     <div className="text-center space-y-4">
                       <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                        <Button 
+                          onClick={handleTodayImage}
+                          disabled={isLoading}
+                          className="bg-gradient-to-r from-[var(--aurora-green)] to-[var(--stellar-blue)] hover:from-[var(--aurora-green)]/80 hover:to-[var(--stellar-blue)]/80 text-[var(--starlight)] font-semibold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[var(--aurora-green)]/50 shadow-lg text-base"
+                        >
+                          <Calendar className="w-5 h-5 mr-3" />
+                          Today's Cosmic Discovery
+                        </Button>
+                        
                         <Button 
                           onClick={handleRandomImage}
                           disabled={isLoading}
