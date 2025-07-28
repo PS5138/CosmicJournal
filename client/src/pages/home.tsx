@@ -53,25 +53,17 @@ export default function Home() {
   const currentDate = getActiveDate();
   const { data: apodData, isLoading, error, refetch } = useApod(currentDate);
   
-  // Debug logging for today's date
+  // Simple debug logging
   useEffect(() => {
-    console.log('Current Date:', currentDate);
-    console.log('APOD Data Date:', apodData?.date);
-    console.log('Media Type:', apodData?.media_type);
-    console.log('URL:', apodData?.url);
-    console.log('Extracted:', apodData?.extracted_from_page);
-  }, [apodData, currentDate]);
-
-  // Force fresh query for today's date to bypass React Query cache (disabled to prevent infinite loop)
-  // useEffect(() => {
-  //   if (currentDate === '2025-07-28' || (currentDate === null && apodData?.date === '2025-07-28')) {
-  //     console.log('Forcing fresh query for today\'s date...');
-  //     queryClient.removeQueries({ queryKey: ['apod', currentDate] });
-  //     setTimeout(() => {
-  //       refetch();
-  //     }, 300);
-  //   }
-  // }, [currentDate, queryClient, refetch, apodData?.date]);
+    if (apodData) {
+      console.log('APOD Data:', {
+        date: apodData.date,
+        media_type: apodData.media_type,
+        url: apodData.url,
+        extracted: apodData.extracted_from_page
+      });
+    }
+  }, [apodData]);
 
 
 
@@ -161,21 +153,15 @@ export default function Home() {
     
     // Track today button usage
     trackEvent('today_view', 'user_interaction', today);
-    
-    // Clear all APOD cache and force fresh request
-    queryClient.clear();
-    queryClient.invalidateQueries({ queryKey: ['apod'] });
   };
 
   const handleForceRefresh = () => {
     console.log('Force refreshing today\'s data...');
-    // Clear all cache and force fresh request
-    queryClient.clear();
+    // Navigate to today and clear specific cache
     setRandomDate('2025-07-28');
     setIsTimeSliderActive(false);
-    setTimeout(() => {
-      refetch();
-    }, 100);
+    queryClient.removeQueries({ queryKey: ['apod', '2025-07-28'] });
+    refetch();
   };
 
   const handleRetry = () => {
