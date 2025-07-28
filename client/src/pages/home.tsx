@@ -162,7 +162,20 @@ export default function Home() {
     // Track today button usage
     trackEvent('today_view', 'user_interaction', today);
     
+    // Clear all APOD cache and force fresh request
+    queryClient.clear();
     queryClient.invalidateQueries({ queryKey: ['apod'] });
+  };
+
+  const handleForceRefresh = () => {
+    console.log('Force refreshing today\'s data...');
+    // Clear all cache and force fresh request
+    queryClient.clear();
+    setRandomDate('2025-07-28');
+    setIsTimeSliderActive(false);
+    setTimeout(() => {
+      refetch();
+    }, 100);
   };
 
   const handleRetry = () => {
@@ -470,6 +483,15 @@ export default function Home() {
                         >
                           <Calendar className="w-5 h-5 mr-3" />
                           Today's Cosmic Discovery
+                        </Button>
+                        
+                        <Button 
+                          onClick={handleForceRefresh}
+                          disabled={isLoading}
+                          className="bg-gradient-to-r from-[var(--solar-orange)] to-[var(--aurora-green)] hover:from-[var(--solar-orange)]/80 hover:to-[var(--aurora-green)]/80 text-[var(--starlight)] font-semibold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[var(--solar-orange)]/50 shadow-lg text-base"
+                        >
+                          <RotateCcw className="w-5 h-5 mr-3" />
+                          Force Fresh Video Data
                         </Button>
                         
                         <Button 
