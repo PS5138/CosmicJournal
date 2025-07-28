@@ -335,26 +335,61 @@ export default function Home() {
                         title={apodData.title}
                       />
                     </div>
+                  ) : apodData.date === '2025-07-28' ? (
+                    <div className="w-full max-w-4xl mx-auto">
+                      <video 
+                        className="w-full max-w-3xl mx-auto rounded-2xl shadow-2xl border border-[var(--cosmic-purple)]/30"
+                        controls 
+                        autoPlay 
+                        muted
+                        preload="metadata"
+                        style={{ backgroundColor: '#000' }}
+                      >
+                        <source 
+                          src="https://apod.nasa.gov/apod/image/2507/DimorphosVideo_DartLuke.mp4" 
+                          type="video/mp4"
+                        />
+                        <div className="w-full max-w-3xl mx-auto rounded-2xl bg-gradient-to-br from-[var(--space-blue)]/40 to-[var(--cosmic-purple)]/20 border border-[var(--cosmic-purple)]/30 p-8 text-center">
+                          <p className="text-[var(--cosmic-gray)]">
+                            Your browser does not support the video tag. 
+                            <Button
+                              onClick={() => window.open(`https://apod.nasa.gov/apod/ap${apodData.date.replace(/-/g, '').slice(2)}.html`, '_blank')}
+                              variant="link"
+                              className="text-[var(--stellar-blue)] underline ml-1"
+                            >
+                              Watch on NASA APOD
+                            </Button>
+                          </p>
+                        </div>
+                      </video>
+                      <div className="mt-4 text-center">
+                        <p className="text-sm text-[var(--cosmic-gray)] mb-2">
+                          <strong className="text-[var(--starlight)]">DART Mission:</strong> LICIACube's LUKE camera time-lapse
+                        </p>
+                        <p className="text-xs text-[var(--cosmic-gray)]">
+                          ~250 seconds of expanding debris field after collision with Dimorphos
+                        </p>
+                      </div>
+                    </div>
                   ) : (
                     <div className="w-full max-w-3xl mx-auto rounded-2xl bg-gradient-to-br from-[var(--space-blue)]/40 to-[var(--cosmic-purple)]/20 border border-[var(--cosmic-purple)]/30 p-8 text-center">
                       <div className="flex items-center justify-center mb-4">
-                        <Camera className="w-8 h-8 text-[var(--stellar-blue)]" />
+                        <AlertTriangle className="w-8 h-8 text-[var(--stellar-blue)]" />
                       </div>
                       <h3 className="text-xl font-semibold text-[var(--starlight)] mb-2">
-                        NASA Video Content Available
+                        Special Content Entry
                       </h3>
                       <p className="text-[var(--cosmic-gray)] leading-relaxed mb-4">
-                        Today's APOD features a special video from NASA's DART mission showing the collision with asteroid Dimorphos. 
-                        The video is available on NASA's official APOD page.
+                        This entry contains special astronomical content that isn't available as a direct image or video link.
                       </p>
-                      
                       <div className="space-y-3">
                         <Button
                           onClick={() => window.open(`https://apod.nasa.gov/apod/ap${apodData.date.replace(/-/g, '').slice(2)}.html`, '_blank')}
-                          className="bg-gradient-to-r from-[var(--cosmic-purple)] to-[var(--stellar-blue)] hover:from-[var(--cosmic-purple)]/80 hover:to-[var(--stellar-blue)]/80 text-[var(--starlight)] rounded-xl mr-3"
+                          variant="outline"
+                          className="border-[var(--cosmic-purple)]/50 hover:bg-[var(--cosmic-purple)]/20 rounded-xl mr-3 text-[#000000]"
                         >
                           <ExternalLink className="w-4 h-4 mr-2" />
-                          Watch Video on NASA APOD
+                          View on NASA APOD
                         </Button>
                         <Button
                           onClick={handleRandomImage}
