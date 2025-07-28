@@ -335,6 +335,16 @@ export default function Home() {
               </CardHeader>
 
               <CardContent>
+                {/* Debug Display */}
+                {currentDate === '2025-07-28' && apodData && (
+                  <div className="mb-6 p-4 bg-gray-900/50 rounded-lg">
+                    <h4 className="text-sm font-bold text-yellow-400 mb-2">Debug Data:</h4>
+                    <pre className="text-xs text-left whitespace-pre-wrap break-all text-[var(--cosmic-gray)]">
+                      {JSON.stringify(apodData, null, 2)}
+                    </pre>
+                  </div>
+                )}
+                
                 {/* Media Container */}
                 <div className="mb-6">
                           {apodData.url && apodData.media_type === 'video' ? (
