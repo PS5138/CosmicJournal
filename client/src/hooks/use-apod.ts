@@ -4,8 +4,8 @@ interface APODData {
   title: string;
   date: string;
   explanation: string;
-  url: string;
-  media_type: 'image' | 'video';
+  url?: string;
+  media_type: 'image' | 'video' | 'other';
   hdurl?: string;
   copyright?: string;
 }

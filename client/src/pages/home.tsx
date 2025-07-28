@@ -341,26 +341,31 @@ export default function Home() {
                         <AlertTriangle className="w-8 h-8 text-[var(--stellar-blue)]" />
                       </div>
                       <h3 className="text-xl font-semibold text-[var(--starlight)] mb-2">
-                        Media Not Available
+                        Special Content Entry
                       </h3>
-                      <p className="text-[var(--cosmic-gray)] leading-relaxed">
-                        Today's astronomy content is not available as a standard image or video. 
-                        {apodData.media_type === 'other' 
-                          ? " This entry contains special content that cannot be displayed directly."
-                          : " Please check back later or try a different date."}
+                      <p className="text-[var(--cosmic-gray)] leading-relaxed mb-4">
+                        Today's entry contains special astronomical content that isn't available as a direct image or video link. 
+                        {apodData.explanation.toLowerCase().includes('video') && 
+                          " The description mentions a video - this content may be available on NASA's main website."}
                       </p>
-                      {apodData.url && (
-                        <div className="mt-4">
-                          <Button
-                            onClick={() => window.open(apodData.url, '_blank')}
-                            variant="outline"
-                            className="border-[var(--cosmic-purple)]/50 hover:bg-[var(--cosmic-purple)]/20 text-[var(--starlight)] rounded-xl"
-                          >
-                            <ExternalLink className="w-4 h-4 mr-2" />
-                            View on NASA's Site
-                          </Button>
-                        </div>
-                      )}
+                      <div className="space-y-3">
+                        <Button
+                          onClick={() => window.open('https://apod.nasa.gov/apod/astropix.html', '_blank')}
+                          variant="outline"
+                          className="border-[var(--cosmic-purple)]/50 hover:bg-[var(--cosmic-purple)]/20 text-[var(--starlight)] rounded-xl mr-3"
+                        >
+                          <ExternalLink className="w-4 h-4 mr-2" />
+                          View on NASA APOD
+                        </Button>
+                        <Button
+                          onClick={handleRandomImage}
+                          variant="outline"
+                          className="border-[var(--stellar-blue)]/50 hover:bg-[var(--stellar-blue)]/20 text-[var(--starlight)] rounded-xl"
+                        >
+                          <RotateCcw className="w-4 h-4 mr-2" />
+                          Try Different Date
+                        </Button>
+                      </div>
                     </div>
                   )}
                 </div>
