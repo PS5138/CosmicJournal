@@ -53,13 +53,25 @@ export default function Home() {
   const currentDate = getActiveDate();
   const { data: apodData, isLoading, error, refetch } = useApod(currentDate);
   
-  // Force immediate refetch for today's extraction
+  // Force cache clear and refetch for today's extraction
   useEffect(() => {
     if (currentDate === '2025-07-28') {
-      queryClient.clear();
+      queryClient.removeQueries({ queryKey: ['apod', '2025-07-28'] });
       refetch();
     }
-  }, [currentDate, refetch, queryClient]);
+  }, [currentDate, queryClient, refetch]);
+
+  useEffect(() => {
+    if (currentDate === '2025-07-28') {
+      const timeout = setTimeout(() => {
+        queryClient.removeQueries({ queryKey: ['apod'] });
+        queryClient.clear(); // Clear all cache
+        refetch();
+      }, 300); // 300ms buffer
+
+      return () => clearTimeout(timeout);
+    }
+  }, [currentDate]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
