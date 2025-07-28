@@ -352,7 +352,7 @@ export default function Home() {
                         <Button
                           onClick={() => window.open('https://apod.nasa.gov/apod/astropix.html', '_blank')}
                           variant="outline"
-                          className="border-[var(--cosmic-purple)]/50 hover:bg-[var(--cosmic-purple)]/20 text-[var(--starlight)] rounded-xl mr-3"
+                          className="border-[var(--cosmic-purple)]/50 hover:bg-[var(--cosmic-purple)]/20 text-[#000000] rounded-xl mr-3"
                         >
                           <ExternalLink className="w-4 h-4 mr-2" />
                           View on NASA APOD
