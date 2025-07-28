@@ -62,16 +62,16 @@ export default function Home() {
     console.log('Extracted:', apodData?.extracted_from_page);
   }, [apodData, currentDate]);
 
-  // Force fresh query for today's date to bypass React Query cache
-  useEffect(() => {
-    if (currentDate === '2025-07-28' || (currentDate === null && apodData?.date === '2025-07-28')) {
-      console.log('Forcing fresh query for today\'s date...');
-      queryClient.removeQueries({ queryKey: ['apod', currentDate] });
-      setTimeout(() => {
-        refetch();
-      }, 300);
-    }
-  }, [currentDate, queryClient, refetch, apodData?.date]);
+  // Force fresh query for today's date to bypass React Query cache (disabled to prevent infinite loop)
+  // useEffect(() => {
+  //   if (currentDate === '2025-07-28' || (currentDate === null && apodData?.date === '2025-07-28')) {
+  //     console.log('Forcing fresh query for today\'s date...');
+  //     queryClient.removeQueries({ queryKey: ['apod', currentDate] });
+  //     setTimeout(() => {
+  //       refetch();
+  //     }, 300);
+  //   }
+  // }, [currentDate, queryClient, refetch, apodData?.date]);
 
 
 
