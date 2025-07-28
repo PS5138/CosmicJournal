@@ -53,12 +53,22 @@ export default function Home() {
   const currentDate = getActiveDate();
   const { data: apodData, isLoading, error, refetch } = useApod(currentDate);
   
-  // Simple notification for "other" media type
+  // Auto-extract video when "other" media type is detected
   useEffect(() => {
     if (apodData && apodData.media_type === "other" && !apodData.extracted_from_page) {
-      console.log('Detected "other" media type - use Force Fresh Video Data button for extraction');
+      console.log('Auto-extracting video content...');
+      // Automatically fetch with force parameter to extract video
+      const forceUrl = `/api/apod?date=${apodData.date}&force=${Date.now()}`;
+      fetch(forceUrl, { cache: 'no-store' })
+        .then(response => response.json())
+        .then(data => {
+          if (data.extracted_from_page) {
+            // Update the query cache with extracted data
+            queryClient.setQueryData(['apod', currentDate], data);
+          }
+        });
     }
-  }, [apodData]);
+  }, [apodData?.date, apodData?.media_type, currentDate, queryClient]);
 
   // Debug logging
   useEffect(() => {
@@ -153,32 +163,7 @@ export default function Home() {
     queryClient.invalidateQueries({ queryKey: ['apod'] });
   };
 
-  const handleTodayImage = () => {
-    const today = new Date().toISOString().split('T')[0];
-    setIsTimeSliderActive(false);
-    setRandomDate(today);
-    
-    // Track today button usage
-    trackEvent('today_view', 'user_interaction', today);
-  };
 
-  const handleForceRefresh = () => {
-    console.log('Force refreshing today\'s data...');
-    // Navigate to today and force fresh extraction
-    setRandomDate('2025-07-28');
-    setIsTimeSliderActive(false);
-    queryClient.removeQueries({ queryKey: ['apod', '2025-07-28'] });
-    
-    // Use force parameter to bypass all caching and ensure extraction
-    const forceUrl = `/api/apod?date=2025-07-28&force=${Date.now()}`;
-    fetch(forceUrl, { cache: 'no-store' }).then(response => response.json()).then(data => {
-      console.log('Force refresh result:', data);
-      if (data.extracted_from_page) {
-        // Update cache with fresh extracted data
-        queryClient.setQueryData(['apod', '2025-07-28'], data);
-      }
-    });
-  };
 
   const handleRetry = () => {
     refetch();
@@ -478,24 +463,6 @@ export default function Home() {
                     {/* Action Buttons */}
                     <div className="text-center space-y-4">
                       <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                        <Button 
-                          onClick={handleTodayImage}
-                          disabled={isLoading}
-                          className="bg-gradient-to-r from-[var(--aurora-green)] to-[var(--stellar-blue)] hover:from-[var(--aurora-green)]/80 hover:to-[var(--stellar-blue)]/80 text-[var(--starlight)] font-semibold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[var(--aurora-green)]/50 shadow-lg text-base"
-                        >
-                          <Calendar className="w-5 h-5 mr-3" />
-                          Today's Cosmic Discovery
-                        </Button>
-                        
-                        <Button 
-                          onClick={handleForceRefresh}
-                          disabled={isLoading}
-                          className="bg-gradient-to-r from-[var(--solar-orange)] to-[var(--aurora-green)] hover:from-[var(--solar-orange)]/80 hover:to-[var(--aurora-green)]/80 text-[var(--starlight)] font-semibold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[var(--solar-orange)]/50 shadow-lg text-base"
-                        >
-                          <RotateCcw className="w-5 h-5 mr-3" />
-                          Force Fresh Video Data
-                        </Button>
-                        
                         <Button 
                           onClick={handleRandomImage}
                           disabled={isLoading}
