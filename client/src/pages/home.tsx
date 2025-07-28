@@ -53,7 +53,14 @@ export default function Home() {
   const currentDate = getActiveDate();
   const { data: apodData, isLoading, error, refetch } = useApod(currentDate);
   
-  // Simple debug logging
+  // Simple notification for "other" media type
+  useEffect(() => {
+    if (apodData && apodData.media_type === "other" && !apodData.extracted_from_page) {
+      console.log('Detected "other" media type - use Force Fresh Video Data button for extraction');
+    }
+  }, [apodData]);
+
+  // Debug logging
   useEffect(() => {
     if (apodData) {
       console.log('APOD Data:', {
@@ -157,11 +164,20 @@ export default function Home() {
 
   const handleForceRefresh = () => {
     console.log('Force refreshing today\'s data...');
-    // Navigate to today and clear specific cache
+    // Navigate to today and force fresh extraction
     setRandomDate('2025-07-28');
     setIsTimeSliderActive(false);
     queryClient.removeQueries({ queryKey: ['apod', '2025-07-28'] });
-    refetch();
+    
+    // Use force parameter to bypass all caching and ensure extraction
+    const forceUrl = `/api/apod?date=2025-07-28&force=${Date.now()}`;
+    fetch(forceUrl, { cache: 'no-store' }).then(response => response.json()).then(data => {
+      console.log('Force refresh result:', data);
+      if (data.extracted_from_page) {
+        // Update cache with fresh extracted data
+        queryClient.setQueryData(['apod', '2025-07-28'], data);
+      }
+    });
   };
 
   const handleRetry = () => {

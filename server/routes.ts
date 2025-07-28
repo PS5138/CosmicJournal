@@ -77,7 +77,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // NASA APOD API proxy endpoint
   app.get("/api/apod", async (req, res) => {
     try {
-      const { date } = req.query;
+      const { date, force } = req.query;
       const API_KEY = process.env.NASA_API_KEY || "DEMO_KEY";
 
       let url = `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}`;
@@ -102,11 +102,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // Check if API response lacks direct media URL and attempt extraction
+      // Check if we need to force extraction or if media type is "other"
       const needsExtraction =
+        force || // Force parameter bypasses all caching and ensures extraction
         data.media_type === "other" ||
         (!data.url && data.media_type) ||
         (data.media_type === "video" && !data.url);
+
+      // Always disable caching for extraction requests
+      if (needsExtraction) {
+        res.set({
+          "Cache-Control": "no-cache, no-store, must-revalidate",
+          Pragma: "no-cache",
+          Expires: "0",
+        });
+      }
 
       if (needsExtraction && date && typeof date === "string") {
         console.log(
@@ -123,13 +133,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
           data.media_type = extractedMedia.media_type;
           data.url = extractedMedia.url;
           data.extracted_from_page = true;
-
-          // Force no-cache for extracted content
-          res.set({
-            "Cache-Control": "no-cache, no-store, must-revalidate",
-            Pragma: "no-cache",
-            Expires: "0",
-          });
         }
       }
 

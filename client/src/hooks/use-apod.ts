@@ -23,7 +23,9 @@ export function useApod(date?: string | null) {
         url += `?date=${date}`;
       }
       
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        cache: 'no-store' // Force fresh requests to bypass browser cache
+      });
       
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
@@ -40,8 +42,8 @@ export function useApod(date?: string | null) {
     },
     retry: 2,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 10 * 60 * 1000, // 10 minutes
+    staleTime: 1 * 60 * 1000, // 1 minute for today's date extraction
+    gcTime: 5 * 60 * 1000, // 5 minutes
     refetchOnWindowFocus: false
   });
 }
