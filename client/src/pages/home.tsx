@@ -177,7 +177,7 @@ export default function Home() {
     if (apodData?.media_type === 'image') {
       trackEvent('share', 'social_media', 'pinterest');
       const description = `${apodData.title} - ${apodData.explanation.substring(0, 100)}...`;
-      const url = `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(generateShareUrl())}&media=${encodeURIComponent(apodData.url)}&description=${encodeURIComponent(description)}`;
+      const url = `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(generateShareUrl())}&media=${encodeURIComponent(apodData.url || '')}&description=${encodeURIComponent(description)}`;
       window.open(url, '_blank', 'width=550,height=450');
     }
   };
@@ -319,23 +319,7 @@ export default function Home() {
               <CardContent>
                 {/* Media Container */}
                 <div className="mb-6">
-                  {apodData.media_type === 'image' && apodData.url ? (
-                    <img 
-                      src={apodData.url}
-                      alt={apodData.title}
-                      className="w-full max-w-3xl mx-auto rounded-2xl shadow-2xl transition-transform duration-300 hover:scale-[1.02]"
-                    />
-                  ) : apodData.media_type === 'video' && apodData.url ? (
-                    <div className="relative w-full max-w-3xl mx-auto aspect-video rounded-2xl overflow-hidden shadow-2xl">
-                      <iframe 
-                        src={apodData.url}
-                        className="w-full h-full"
-                        frameBorder="0" 
-                        allowFullScreen
-                        title={apodData.title}
-                      />
-                    </div>
-                  ) : apodData.media_type === 'video' && apodData.url && (apodData as any).extracted_from_page ? (
+                  {apodData.media_type === 'video' && apodData.url && (apodData as any).extracted_from_page ? (
                     <div className="w-full max-w-4xl mx-auto">
                       <video 
                         className="w-full max-w-3xl mx-auto rounded-2xl shadow-2xl border border-[var(--cosmic-purple)]/30"
@@ -377,6 +361,22 @@ export default function Home() {
                       alt={apodData.title}
                       className="w-full max-w-3xl mx-auto rounded-2xl shadow-2xl transition-transform duration-300 hover:scale-[1.02]"
                     />
+                  ) : apodData.media_type === 'image' && apodData.url ? (
+                    <img 
+                      src={apodData.url}
+                      alt={apodData.title}
+                      className="w-full max-w-3xl mx-auto rounded-2xl shadow-2xl transition-transform duration-300 hover:scale-[1.02]"
+                    />
+                  ) : apodData.media_type === 'video' && apodData.url ? (
+                    <div className="relative w-full max-w-3xl mx-auto aspect-video rounded-2xl overflow-hidden shadow-2xl">
+                      <iframe 
+                        src={apodData.url}
+                        className="w-full h-full"
+                        frameBorder="0" 
+                        allowFullScreen
+                        title={apodData.title}
+                      />
+                    </div>
                   ) : (
                     <div className="w-full max-w-3xl mx-auto rounded-2xl bg-gradient-to-br from-[var(--space-blue)]/40 to-[var(--cosmic-purple)]/20 border border-[var(--cosmic-purple)]/30 p-8 text-center">
                       <div className="flex items-center justify-center mb-4">
