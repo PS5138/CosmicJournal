@@ -22,7 +22,14 @@ async function fetchAPOD(date?: string | null): Promise<APODData> {
     }
   }
 
-  const response = await fetch(url);
+  const response = await fetch(url, {
+    // Force fresh request for today's date to bypass all caching
+    cache: date === '2025-07-28' ? 'no-cache' : 'default',
+    headers: date === '2025-07-28' ? {
+      'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache'
+    } : {}
+  });
   
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
@@ -46,8 +53,9 @@ export function useApod(date?: string | null) {
     queryFn: () => fetchAPOD(date),
     retry: 2,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
-    staleTime: 0, // No cache to ensure fresh extraction
-    gcTime: 10 * 60 * 1000, // 10 minutes
+    staleTime: date === '2025-07-28' ? 0 : 5 * 60 * 1000, // No cache for today
+    gcTime: date === '2025-07-28' ? 0 : 10 * 60 * 1000, // No cache for today
     refetchOnMount: date === '2025-07-28', // Always refetch for today's date
+    refetchOnWindowFocus: date === '2025-07-28', // Refetch when window focused
   });
 }
