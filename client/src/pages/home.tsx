@@ -328,18 +328,9 @@ export default function Home() {
               <CardContent>
                 {/* Media Container */}
                 <div className="mb-6">
-                  {/* Debug info for today's entry */}
-                  {apodData.date === '2025-07-28' && (
-                    <div className="mb-4 p-3 bg-blue-900/20 border border-blue-500/30 rounded-lg text-xs font-mono">
-                      <div>Debug: media_type = "{apodData.media_type}"</div>
-                      <div>Debug: has url = {apodData.url ? 'YES' : 'NO'}</div>
-                      <div>Debug: extracted = {(apodData as any).extracted_from_page ? 'YES' : 'NO'}</div>
-                      {apodData.url && <div>Debug: url = {apodData.url.substring(0, 60)}...</div>}
-                    </div>
-                  )}
                   
-                  {(apodData.media_type === 'video' && apodData.url) || 
-                   (apodData.date === '2025-07-28' && apodData.url && apodData.url.includes('.mp4')) ? (
+                  
+                  {(apodData.media_type === 'video' || (apodData.url && apodData.url.endsWith('.mp4'))) && apodData.url ? (
                     <div className="w-full max-w-4xl mx-auto">
                       <video 
                         className="w-full max-w-3xl mx-auto rounded-2xl shadow-2xl border border-[var(--cosmic-purple)]/30"
