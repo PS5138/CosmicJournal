@@ -335,7 +335,7 @@ export default function Home() {
                         title={apodData.title}
                       />
                     </div>
-                  ) : apodData.date === '2025-07-28' ? (
+                  ) : apodData.media_type === 'video' && apodData.url && (apodData as any).extracted_from_page ? (
                     <div className="w-full max-w-4xl mx-auto">
                       <video 
                         className="w-full max-w-3xl mx-auto rounded-2xl shadow-2xl border border-[var(--cosmic-purple)]/30"
@@ -346,7 +346,7 @@ export default function Home() {
                         style={{ backgroundColor: '#000' }}
                       >
                         <source 
-                          src="https://apod.nasa.gov/apod/image/2507/DimorphosVideo_DartLuke.mp4" 
+                          src={apodData.url} 
                           type="video/mp4"
                         />
                         <div className="w-full max-w-3xl mx-auto rounded-2xl bg-gradient-to-br from-[var(--space-blue)]/40 to-[var(--cosmic-purple)]/20 border border-[var(--cosmic-purple)]/30 p-8 text-center">
@@ -364,13 +364,19 @@ export default function Home() {
                       </video>
                       <div className="mt-4 text-center">
                         <p className="text-sm text-[var(--cosmic-gray)] mb-2">
-                          <strong className="text-[var(--starlight)]">DART Mission:</strong> LICIACube's LUKE camera time-lapse
+                          <strong className="text-[var(--starlight)]">Video Content:</strong> Extracted from NASA APOD
                         </p>
                         <p className="text-xs text-[var(--cosmic-gray)]">
-                          ~250 seconds of expanding debris field after collision with Dimorphos
+                          Content automatically retrieved when API doesn't provide direct links
                         </p>
                       </div>
                     </div>
+                  ) : apodData.media_type === 'image' && apodData.url && (apodData as any).extracted_from_page ? (
+                    <img 
+                      src={apodData.url}
+                      alt={apodData.title}
+                      className="w-full max-w-3xl mx-auto rounded-2xl shadow-2xl transition-transform duration-300 hover:scale-[1.02]"
+                    />
                   ) : (
                     <div className="w-full max-w-3xl mx-auto rounded-2xl bg-gradient-to-br from-[var(--space-blue)]/40 to-[var(--cosmic-purple)]/20 border border-[var(--cosmic-purple)]/30 p-8 text-center">
                       <div className="flex items-center justify-center mb-4">

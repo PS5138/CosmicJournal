@@ -8,6 +8,7 @@ interface APODData {
   media_type: 'image' | 'video' | 'other';
   hdurl?: string;
   copyright?: string;
+  extracted_from_page?: boolean;
 }
 
 async function fetchAPOD(date?: string | null): Promise<APODData> {

@@ -4,7 +4,7 @@
 
 This is a clean, minimalist space-themed web application that displays NASA's Astronomy Picture of the Day (APOD). The application serves as a meditative space diary, allowing users to view daily astronomical images/videos and explore random entries from the APOD archive. Built with a modern full-stack architecture using React, Express, and PostgreSQL.
 
-**Status**: ✅ Fully functional with NASA API integration, beautiful space-themed UI, interactive Cosmic Time Travel Slider, and Google Analytics tracking (July 26, 2025)
+**Status**: ✅ Fully functional with NASA API integration, automatic media extraction system, beautiful space-themed UI, interactive Cosmic Time Travel Slider, and Google Analytics tracking (July 28, 2025)
 
 ## User Preferences
 
@@ -55,10 +55,11 @@ Preferred communication style: Simple, everyday language.
 
 ### NASA APOD Integration
 1. **API Consumption**: Direct integration with NASA's APOD API
-2. **Caching Strategy**: TanStack Query provides intelligent caching with 5-minute stale time
-3. **Random Image Feature**: Generates random dates between APOD start (1995-06-16) and present
-4. **Error Handling**: Graceful fallbacks with retry mechanisms (2 retries with exponential backoff)
-5. **Data Validation**: TypeScript interfaces ensure type safety for APOD responses
+2. **Automatic Media Extraction**: When API lacks direct URLs (media_type: "other"), system automatically extracts video/image URLs from NASA's APOD HTML pages
+3. **Caching Strategy**: TanStack Query provides intelligent caching with 5-minute stale time
+4. **Random Image Feature**: Generates random dates between APOD start (1995-06-16) and present
+5. **Error Handling**: Graceful fallbacks with retry mechanisms (2 retries with exponential backoff)
+6. **Data Validation**: TypeScript interfaces ensure type safety for APOD responses with extraction tracking
 
 ### State Management
 - **Server State**: TanStack Query manages API data, caching, and synchronization
