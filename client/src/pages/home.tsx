@@ -328,298 +328,275 @@ export default function Home() {
               <CardContent>
                 {/* Media Container */}
                 <div className="mb-6">
-                  {(apodData.media_type === 'video' || (apodData.url && apodData.url.endsWith('.mp4'))) && apodData.url ? (
-                    <div className="w-full max-w-4xl mx-auto">
-                      <video 
-                        className="w-full max-w-3xl mx-auto rounded-2xl shadow-2xl border border-[var(--cosmic-purple)]/30"
-                        controls 
-                        autoPlay 
-                        muted
-                        preload="metadata"
-                        style={{ backgroundColor: '#000' }}
-                      >
-                        <source 
-                          src={apodData.url} 
-                          type="video/mp4"
-                        />
-                        <div className="w-full max-w-3xl mx-auto rounded-2xl bg-gradient-to-br from-[var(--space-blue)]/40 to-[var(--cosmic-purple)]/20 border border-[var(--cosmic-purple)]/30 p-8 text-center">
-                          <p className="text-[var(--cosmic-gray)]">
-                            Your browser does not support the video tag. 
-                            <Button
-                              onClick={() => window.open(`https://apod.nasa.gov/apod/ap${apodData.date.replace(/-/g, '').slice(2)}.html`, '_blank')}
-                              variant="link"
-                              className="text-[var(--stellar-blue)] underline ml-1"
-                            >
-                              Watch on NASA APOD
-                            </Button>
-                          </p>
-                        </div>
-                      </video>
-                      <div className="mt-4 text-center">
-                        <p className="text-sm text-[var(--cosmic-gray)] mb-2">
-                          <strong className="text-[var(--starlight)]">Video Content:</strong> Extracted from NASA APOD
-                        </p>
-                        <p className="text-xs text-[var(--cosmic-gray)]">
-                          Content automatically retrieved when API doesn't provide direct links
-                        </p>
-                      </div>
-                    </div>
-                  ) : apodData.media_type === 'image' && apodData.url && (apodData as any).extracted_from_page ? (
-                    <img 
-                      src={apodData.url}
-                      alt={apodData.title}
-                      className="w-full max-w-3xl mx-auto rounded-2xl shadow-2xl transition-transform duration-300 hover:scale-[1.02]"
-                    />
-                  ) : apodData.media_type === 'image' && apodData.url ? (
-                    <img 
-                      src={apodData.url}
-                      alt={apodData.title}
-                      className="w-full max-w-3xl mx-auto rounded-2xl shadow-2xl transition-transform duration-300 hover:scale-[1.02]"
-                    />
-                  ) : apodData.media_type === 'video' && apodData.url ? (
-                    <div className="relative w-full max-w-3xl mx-auto aspect-video rounded-2xl overflow-hidden shadow-2xl">
-                      <iframe 
-                        src={apodData.url}
-                        className="w-full h-full"
-                        frameBorder="0" 
-                        allowFullScreen
-                        title={apodData.title}
-                      />
-                    </div>
-                  ) : (
-                    <div className="w-full max-w-3xl mx-auto rounded-2xl bg-gradient-to-br from-[var(--space-blue)]/40 to-[var(--cosmic-purple)]/20 border border-[var(--cosmic-purple)]/30 p-8 text-center">
-                      <div className="flex items-center justify-center mb-4">
-                        <AlertTriangle className="w-8 h-8 text-[var(--stellar-blue)]" />
-                      </div>
-                      <h3 className="text-xl font-semibold text-[var(--starlight)] mb-2">
-                        Special Content Entry
-                      </h3>
-                      <p className="text-[var(--cosmic-gray)] leading-relaxed mb-4">
-                        This entry contains special astronomical content that isn't available as a direct image or video link.
-                      </p>
-                      <div className="space-y-3">
-                        <Button
-                          onClick={() => window.open(`https://apod.nasa.gov/apod/ap${apodData.date.replace(/-/g, '').slice(2)}.html`, '_blank')}
-                          variant="outline"
-                          className="border-[var(--cosmic-purple)]/50 hover:bg-[var(--cosmic-purple)]/20 rounded-xl mr-3 text-[#000000]"
-                        >
-                          <ExternalLink className="w-4 h-4 mr-2" />
-                          View on NASA APOD
-                        </Button>
-                        <Button
+                          {apodData.url && apodData.media_type === 'video' ? (
+                              apodData.url.endsWith('.mp4') ? (
+                                <video 
+                                  className="w-full max-w-3xl mx-auto rounded-2xl shadow-2xl border border-[var(--cosmic-purple)]/30"
+                                  controls 
+                                  autoPlay 
+                                  muted
+                                  preload="metadata"
+                                  style={{ backgroundColor: '#000' }}
+                                >
+                                  <source src={apodData.url} type="video/mp4" />
+                                  Your browser does not support the video tag.
+                                </video>
+                              ) : (
+                                <div className="relative w-full max-w-3xl mx-auto aspect-video rounded-2xl overflow-hidden shadow-2xl">
+                                  <iframe 
+                                    src={apodData.url}
+                                    className="w-full h-full"
+                                    frameBorder="0"
+                                    allowFullScreen
+                                    title={apodData.title}
+                                  />
+                                </div>
+                              )
+                            ) : apodData.media_type === 'image' && apodData.url ? (
+                              <img 
+                                src={apodData.url}
+                                alt={apodData.title}
+                                className="w-full max-w-3xl mx-auto rounded-2xl shadow-2xl transition-transform duration-300 hover:scale-[1.02]"
+                              />
+                            ) : (
+                              <div className="w-full max-w-3xl mx-auto rounded-2xl bg-gradient-to-br from-[var(--space-blue)]/40 to-[var(--cosmic-purple)]/20 border border-[var(--cosmic-purple)]/30 p-8 text-center">
+                                <div className="flex items-center justify-center mb-4">
+                                  <AlertTriangle className="w-8 h-8 text-[var(--stellar-blue)]" />
+                                </div>
+                                <h3 className="text-xl font-semibold text-[var(--starlight)] mb-2">
+                                  Special Content Entry
+                                </h3>
+                                <p className="text-[var(--cosmic-gray)] leading-relaxed mb-4">
+                                  This entry contains special astronomical content that isn't available as a direct image or video link.
+                                </p>
+                                <div className="space-y-3">
+                                  <Button
+                                    onClick={() =>
+                                      window.open(
+                                        `https://apod.nasa.gov/apod/ap${apodData.date.replace(/-/g, '').slice(2)}.html`,
+                                        '_blank'
+                                      )
+                                    }
+                                    variant="outline"
+                                    className="border-[var(--cosmic-purple)]/50 hover:bg-[var(--cosmic-purple)]/20 rounded-xl mr-3 text-[#000000]"
+                                  >
+                                    <ExternalLink className="w-4 h-4 mr-2" />
+                                    View on NASA APOD
+                                  </Button>
+                                  <Button
+                                    onClick={handleRandomImage}
+                                    variant="outline"
+                                    className="border-[var(--stellar-blue)]/50 hover:bg-[var(--stellar-blue)]/20 text-[#000000] rounded-xl"
+                                  >
+                                    <RotateCcw className="w-4 h-4 mr-2" />
+                                    Try Different Date
+                                  </Button>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Description */}
+                          <div className="prose prose-lg prose-invert max-w-none">
+                            <p className="text-[var(--cosmic-gray)] leading-relaxed text-base md:text-lg">
+                              {apodData.explanation}
+                            </p>
+                          </div>
+
+                          {/* Share Section */}
+                          <div className="mt-6 pt-6 border-t border-[var(--cosmic-purple)]/30">
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center space-x-2 text-[var(--cosmic-gray)]">
+                                <Share2 className="w-4 h-4" />
+                                <span className="text-sm">Share this cosmic wonder</span>
+                              </div>
+                              <Button
+                                onClick={() => setIsShareDialogOpen(true)}
+                                variant="outline"
+                                size="sm"
+                                className="border-[var(--cosmic-purple)]/50 hover:bg-[var(--cosmic-purple)]/20 text-[#030202] rounded-xl"
+                              >
+                                <Share2 className="w-4 h-4 mr-2" />
+                                Share
+                              </Button>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    )}
+
+                    {/* Action Buttons */}
+                    <div className="text-center space-y-4">
+                      <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                        <Button 
                           onClick={handleRandomImage}
-                          variant="outline"
-                          className="border-[var(--stellar-blue)]/50 hover:bg-[var(--stellar-blue)]/20 text-[#000000] rounded-xl"
+                          disabled={isLoading}
+                          className="bg-gradient-to-r from-[var(--cosmic-purple)] to-[var(--stellar-blue)] hover:from-[var(--cosmic-purple)]/80 hover:to-[var(--stellar-blue)]/80 text-[var(--starlight)] font-semibold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[var(--cosmic-purple)]/50 shadow-lg text-base"
                         >
-                          <RotateCcw className="w-4 h-4 mr-2" />
-                          Try Different Date
+                          <RotateCcw className="w-5 h-5 mr-3" />
+                          Show Another Random Image
                         </Button>
+
+                        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                          <DialogTrigger asChild>
+                            <Button 
+                              disabled={isLoading}
+                              className="bg-gradient-to-r from-[var(--solar-orange)] to-[var(--aurora-green)] hover:from-[var(--solar-orange)]/80 hover:to-[var(--aurora-green)]/80 text-[var(--starlight)] font-semibold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[var(--solar-orange)]/50 shadow-lg text-base"
+                            >
+                              <Cake className="w-5 h-5 mr-3" />
+                              Check NASA's Image on Your Birthday 🎂
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="bg-gradient-to-br from-[var(--space-dark)] to-[var(--space-navy)] backdrop-blur-sm border border-[var(--cosmic-purple)]/50 rounded-3xl text-[var(--starlight)] max-w-sm">
+                            <DialogHeader>
+                              <DialogTitle className="text-xl font-semibold text-center mb-2 text-[var(--starlight)]">
+                                🎂 Birthday Cosmic Journey
+                              </DialogTitle>
+                              <DialogDescription className="text-[var(--starlight)]/80 text-center text-sm leading-relaxed">
+                                Discover what celestial wonder NASA featured on your special day!
+                              </DialogDescription>
+                            </DialogHeader>
+                            <div className="space-y-4 p-2">
+                              <div className="space-y-3">
+                                <label className="block text-sm font-medium text-[var(--starlight)]">
+                                  Enter your birthday:
+                                </label>
+                                <Input
+                                  type="date"
+                                  value={birthdayDate}
+                                  onChange={(e) => setBirthdayDate(e.target.value)}
+                                  min="1995-06-16"
+                                  max={new Date().toISOString().split('T')[0]}
+                                  className="border border-[var(--cosmic-purple)]/50 rounded-xl text-[var(--starlight)] focus:ring-2 focus:ring-[var(--cosmic-purple)] focus:border-[var(--cosmic-purple)] placeholder:text-[var(--cosmic-gray)] bg-[#3b2975]"
+                                />
+                              </div>
+                              <div className="flex gap-3 pt-2">
+                                <Button
+                                  onClick={() => setIsDialogOpen(false)}
+                                  variant="outline"
+                                  className="flex-1 border-[var(--cosmic-gray)]/50 hover:bg-[var(--space-navy)] hover:text-[var(--starlight)] rounded-xl text-[#010105] bg-[#ffffff]"
+                                >
+                                  Cancel
+                                </Button>
+                                <Button
+                                  onClick={handleBirthdaySubmit}
+                                  disabled={!birthdayDate}
+                                  className="flex-1 bg-gradient-to-r from-[var(--cosmic-purple)] to-[var(--stellar-blue)] hover:opacity-80 text-[var(--starlight)] rounded-xl"
+                                >
+                                  <Rocket className="w-4 h-4 mr-2" />
+                                  Explore
+                                </Button>
+                              </div>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
                       </div>
                     </div>
-                  )}
-                </div>
+                  </main>
 
-                {/* Description */}
-                <div className="prose prose-lg prose-invert max-w-none">
-                  <p className="text-[var(--cosmic-gray)] leading-relaxed text-base md:text-lg">
-                    {apodData.explanation}
-                  </p>
-                </div>
+                  {/* Social Media Sharing Dialog */}
+                  <Dialog open={isShareDialogOpen} onOpenChange={setIsShareDialogOpen}>
+                    <DialogContent className="bg-gradient-to-br from-[var(--space-dark)] to-[var(--space-navy)] backdrop-blur-sm border border-[var(--cosmic-purple)]/50 rounded-3xl text-[var(--starlight)] max-w-md">
+                      <DialogHeader>
+                        <DialogTitle className="text-xl font-semibold text-center mb-2 text-[var(--starlight)] flex items-center justify-center gap-2">
+                          <Share2 className="w-5 h-5 text-[var(--cosmic-purple)]" />
+                          Share This Cosmic Wonder
+                        </DialogTitle>
+                        <DialogDescription className="text-[var(--starlight)]/80 text-center text-sm leading-relaxed">
+                          Spread the beauty of the cosmos with your friends and followers
+                        </DialogDescription>
+                      </DialogHeader>
+                      
+                      <div className="space-y-4 p-2">
+                        {apodData && (
+                          <div className="bg-[var(--space-blue)]/20 rounded-2xl p-4 border border-[var(--cosmic-purple)]/30">
+                            <h3 className="text-sm font-medium text-[var(--starlight)] mb-2 line-clamp-2">
+                              {apodData.title}
+                            </h3>
+                            <p className="text-xs text-[var(--cosmic-gray)] mb-2">
+                              {formatDate(apodData.date)}
+                            </p>
+                          </div>
+                        )}
 
-                {/* Share Section */}
-                <div className="mt-6 pt-6 border-t border-[var(--cosmic-purple)]/30">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2 text-[var(--cosmic-gray)]">
-                      <Share2 className="w-4 h-4" />
-                      <span className="text-sm">Share this cosmic wonder -------------------------------------------------------------------------------</span>
+                        {/* Social Media Buttons Grid */}
+                        <div className="grid grid-cols-2 gap-3">
+                          <Button
+                            onClick={shareToTwitter}
+                            className="bg-[#1DA1F2] hover:bg-[#1DA1F2]/80 text-white font-medium py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
+                          >
+                            <FaTwitter className="w-4 h-4" />
+                            Twitter
+                          </Button>
+                          
+                          <Button
+                            onClick={shareToFacebook}
+                            className="bg-[#4267B2] hover:bg-[#4267B2]/80 text-white font-medium py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
+                          >
+                            <FaFacebook className="w-4 h-4" />
+                            Facebook
+                          </Button>
+                          
+                          <Button
+                            onClick={shareToLinkedIn}
+                            className="bg-[#0077B5] hover:bg-[#0077B5]/80 text-white font-medium py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
+                          >
+                            <FaLinkedin className="w-4 h-4" />
+                            LinkedIn
+                          </Button>
+                          
+                          <Button
+                            onClick={shareToReddit}
+                            className="bg-[#FF4500] hover:bg-[#FF4500]/80 text-white font-medium py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
+                          >
+                            <FaReddit className="w-4 h-4" />
+                            Reddit
+                          </Button>
+                          
+                          {apodData?.media_type === 'image' && (
+                            <Button
+                              onClick={shareToPinterest}
+                              className="bg-[#BD081C] hover:bg-[#BD081C]/80 text-white font-medium py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
+                            >
+                              <FaPinterest className="w-4 h-4" />
+                              Pinterest
+                            </Button>
+                          )}
+                          
+                          <Button
+                            onClick={copyShareLink}
+                            variant="outline"
+                            className="border-[var(--cosmic-purple)]/50 hover:bg-[var(--cosmic-purple)]/20 text-[#000000] font-medium py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
+                          >
+                            <Link className="w-4 h-4" />
+                            Copy Link
+                          </Button>
+                        </div>
+
+                        <div className="pt-2">
+                          <Button
+                            onClick={() => setIsShareDialogOpen(false)}
+                            variant="outline"
+                            className="w-full border-[var(--cosmic-gray)]/50 hover:bg-[var(--space-navy)] hover:text-[var(--starlight)] rounded-xl text-[var(--cosmic-gray)]"
+                          >
+                            Close
+                          </Button>
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+
+                  {/* Footer */}
+                  <footer className="mt-16 text-center text-[var(--cosmic-gray)]">
+                    <div className="flex items-center justify-center space-x-2 mb-4">
+                      <Rocket className="w-4 h-4 text-[var(--stellar-blue)]" />
+                      <span className="text-sm">Powered by NASA's Astronomy Picture of the Day API</span>
                     </div>
-                    <Button
-                      onClick={() => setIsShareDialogOpen(true)}
-                      variant="outline"
-                      size="sm"
-                      className="border-[var(--cosmic-purple)]/50 hover:bg-[var(--cosmic-purple)]/20 text-[#030202] rounded-xl"
-                    >
-                      <Share2 className="w-4 h-4 mr-2" />
-                      Share
-                    </Button>
-                  </div>
+                    <p className="text-xs opacity-75">
+                      Images and content courtesy of NASA and the astronomical community
+                    </p>
+                  </footer>
                 </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Action Buttons */}
-          <div className="text-center space-y-4">
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button 
-                onClick={handleRandomImage}
-                disabled={isLoading}
-                className="bg-gradient-to-r from-[var(--cosmic-purple)] to-[var(--stellar-blue)] hover:from-[var(--cosmic-purple)]/80 hover:to-[var(--stellar-blue)]/80 text-[var(--starlight)] font-semibold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[var(--cosmic-purple)]/50 shadow-lg text-base"
-              >
-                <RotateCcw className="w-5 h-5 mr-3" />
-                Show Another Random Image
-              </Button>
-
-              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button 
-                    disabled={isLoading}
-                    className="bg-gradient-to-r from-[var(--solar-orange)] to-[var(--aurora-green)] hover:from-[var(--solar-orange)]/80 hover:to-[var(--aurora-green)]/80 text-[var(--starlight)] font-semibold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[var(--solar-orange)]/50 shadow-lg text-base"
-                  >
-                    <Cake className="w-5 h-5 mr-3" />
-                    Check NASA's Image on Your Birthday 🎂
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="bg-gradient-to-br from-[var(--space-dark)] to-[var(--space-navy)] backdrop-blur-sm border border-[var(--cosmic-purple)]/50 rounded-3xl text-[var(--starlight)] max-w-sm">
-                  <DialogHeader>
-                    <DialogTitle className="text-xl font-semibold text-center mb-2 text-[var(--starlight)]">
-                      🎂 Birthday Cosmic Journey
-                    </DialogTitle>
-                    <DialogDescription className="text-[var(--starlight)]/80 text-center text-sm leading-relaxed">
-                      Discover what celestial wonder NASA featured on your special day!
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="space-y-4 p-2">
-                    <div className="space-y-3">
-                      <label className="block text-sm font-medium text-[var(--starlight)]">
-                        Enter your birthday:
-                      </label>
-                      <Input
-                        type="date"
-                        value={birthdayDate}
-                        onChange={(e) => setBirthdayDate(e.target.value)}
-                        min="1995-06-16"
-                        max={new Date().toISOString().split('T')[0]}
-                        className="border border-[var(--cosmic-purple)]/50 rounded-xl text-[var(--starlight)] focus:ring-2 focus:ring-[var(--cosmic-purple)] focus:border-[var(--cosmic-purple)] placeholder:text-[var(--cosmic-gray)] ml-[0px] mr-[0px] mt-[5px] mb-[5px] pt-[8px] pb-[8px] bg-[#3b2975] pl-[104px] pr-[104px]"
-                      />
-                    </div>
-                    <div className="flex gap-3 pt-2">
-                      <Button
-                        onClick={() => setIsDialogOpen(false)}
-                        variant="outline"
-                        className="flex-1 border-[var(--cosmic-gray)]/50 hover:bg-[var(--space-navy)] hover:text-[var(--starlight)] rounded-xl text-[#010105] bg-[#ffffff]"
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        onClick={handleBirthdaySubmit}
-                        disabled={!birthdayDate}
-                        className="flex-1 bg-gradient-to-r from-[var(--cosmic-purple)] to-[var(--stellar-blue)] hover:opacity-80 text-[var(--starlight)] rounded-xl"
-                      >
-                        <Rocket className="w-4 h-4 mr-2" />
-                        Explore
-                      </Button>
-                    </div>
-                  </div>
-                </DialogContent>
-              </Dialog>
-            </div>
-          </div>
-        </main>
-
-        {/* Social Media Sharing Dialog */}
-        <Dialog open={isShareDialogOpen} onOpenChange={setIsShareDialogOpen}>
-          <DialogContent className="bg-gradient-to-br from-[var(--space-dark)] to-[var(--space-navy)] backdrop-blur-sm border border-[var(--cosmic-purple)]/50 rounded-3xl text-[var(--starlight)] max-w-md">
-            <DialogHeader>
-              <DialogTitle className="text-xl font-semibold text-center mb-2 text-[var(--starlight)] flex items-center justify-center gap-2">
-                <Share2 className="w-5 h-5 text-[var(--cosmic-purple)]" />
-                Share This Cosmic Wonder
-              </DialogTitle>
-              <DialogDescription className="text-[var(--starlight)]/80 text-center text-sm leading-relaxed">
-                Spread the beauty of the cosmos with your friends and followers
-              </DialogDescription>
-            </DialogHeader>
-            
-            <div className="space-y-4 p-2">
-              {apodData && (
-                <div className="bg-[var(--space-blue)]/20 rounded-2xl p-4 border border-[var(--cosmic-purple)]/30">
-                  <h3 className="text-sm font-medium text-[var(--starlight)] mb-2 line-clamp-2">
-                    {apodData.title}
-                  </h3>
-                  <p className="text-xs text-[var(--cosmic-gray)] mb-2">
-                    {formatDate(apodData.date)}
-                  </p>
-                </div>
-              )}
-
-              {/* Social Media Buttons Grid */}
-              <div className="grid grid-cols-2 gap-3">
-                <Button
-                  onClick={shareToTwitter}
-                  className="bg-[#1DA1F2] hover:bg-[#1DA1F2]/80 text-white font-medium py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
-                >
-                  <FaTwitter className="w-4 h-4" />
-                  Twitter
-                </Button>
-                
-                <Button
-                  onClick={shareToFacebook}
-                  className="bg-[#4267B2] hover:bg-[#4267B2]/80 text-white font-medium py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
-                >
-                  <FaFacebook className="w-4 h-4" />
-                  Facebook
-                </Button>
-                
-                <Button
-                  onClick={shareToLinkedIn}
-                  className="bg-[#0077B5] hover:bg-[#0077B5]/80 text-white font-medium py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
-                >
-                  <FaLinkedin className="w-4 h-4" />
-                  LinkedIn
-                </Button>
-                
-                <Button
-                  onClick={shareToReddit}
-                  className="bg-[#FF4500] hover:bg-[#FF4500]/80 text-white font-medium py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
-                >
-                  <FaReddit className="w-4 h-4" />
-                  Reddit
-                </Button>
-                
-                {apodData?.media_type === 'image' && (
-                  <Button
-                    onClick={shareToPinterest}
-                    className="bg-[#BD081C] hover:bg-[#BD081C]/80 text-white font-medium py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
-                  >
-                    <FaPinterest className="w-4 h-4" />
-                    Pinterest
-                  </Button>
-                )}
-                
-                <Button
-                  onClick={copyShareLink}
-                  variant="outline"
-                  className="border-[var(--cosmic-purple)]/50 hover:bg-[var(--cosmic-purple)]/20 text-[#000000] font-medium py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
-                >
-                  <Link className="w-4 h-4" />
-                  Copy Link
-                </Button>
               </div>
-
-              <div className="pt-2">
-                <Button
-                  onClick={() => setIsShareDialogOpen(false)}
-                  variant="outline"
-                  className="w-full border-[var(--cosmic-gray)]/50 hover:bg-[var(--space-navy)] hover:text-[var(--starlight)] rounded-xl text-[var(--cosmic-gray)]"
-                >
-                  Close
-                </Button>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
-
-        {/* Footer */}
-        <footer className="mt-16 text-center text-[var(--cosmic-gray)]">
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <Rocket className="w-4 h-4 text-[var(--stellar-blue)]" />
-            <span className="text-sm">Powered by NASA's Astronomy Picture of the Day API</span>
-          </div>
-          <p className="text-xs opacity-75">
-            Images and content courtesy of NASA and the astronomical community
-          </p>
-        </footer>
-      </div>
-    </div>
-  );
-}
+            );
+          }
