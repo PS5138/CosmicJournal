@@ -39,8 +39,10 @@ async function fetchAPOD(date?: string | null): Promise<APODData> {
 }
 
 export function useApod(date?: string | null) {
+  const queryKey = ['apod', date];
+  
   return useQuery<APODData, Error>({
-    queryKey: ['apod', date],
+    queryKey,
     queryFn: () => fetchAPOD(date),
     retry: 2,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
