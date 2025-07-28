@@ -328,8 +328,6 @@ export default function Home() {
               <CardContent>
                 {/* Media Container */}
                 <div className="mb-6">
-                  
-                  
                   {(apodData.media_type === 'video' || (apodData.url && apodData.url.endsWith('.mp4'))) && apodData.url ? (
                     <div className="w-full max-w-4xl mx-auto">
                       <video 
