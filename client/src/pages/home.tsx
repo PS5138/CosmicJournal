@@ -347,14 +347,7 @@ export default function Home() {
                         Today's APOD features a special video from NASA's DART mission showing the collision with asteroid Dimorphos. 
                         The video is available on NASA's official APOD page.
                       </p>
-                      <div className="mb-4 p-4 bg-[var(--space-dark)]/30 rounded-xl border border-[var(--cosmic-purple)]/20">
-                        <p className="text-sm text-[var(--cosmic-gray)] mb-2">
-                          <strong className="text-[var(--starlight)]">Featured Video:</strong> Time-lapse from LICIACube's LUKE camera
-                        </p>
-                        <p className="text-sm text-[var(--cosmic-gray)]">
-                          Showing ~250 seconds of expanding debris field after DART's collision with Dimorphos
-                        </p>
-                      </div>
+                      
                       <div className="space-y-3">
                         <Button
                           onClick={() => window.open(`https://apod.nasa.gov/apod/ap${apodData.date.replace(/-/g, '').slice(2)}.html`, '_blank')}
