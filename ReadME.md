@@ -1,14 +1,12 @@
-# NASA APOD Space Journal
+# NASA Astronomy Picture of the Day Space Journal
 
 ## Overview
 
-This is a clean, minimalist space-themed web application that displays NASA's Astronomy Picture of the Day (APOD). The application serves as a meditative space diary, allowing users to view daily astronomical images/videos and explore random entries from the APOD archive. Built with a modern full-stack architecture using React, Express, and PostgreSQL.
+This is a clean, minimalist space-themed web application that displays NASA's Astronomy Picture of the Day (APOD). You can access it here - https://cosmic-journal.replit.app/
+
+The application serves as a meditative space diary, allowing users to view daily astronomical images/videos and explore random entries from the APOD archive. Built with a modern full-stack architecture using React, Express, and PostgreSQL.
 
 **Status**: ✅ Fully functional with NASA API integration, seamless automatic video extraction system, beautiful space-themed UI, interactive Cosmic Time Travel Slider, and Google Analytics tracking (July 28, 2025)
-
-## User Preferences
-
-Preferred communication style: Simple, everyday language.
 
 ## System Architecture
 
